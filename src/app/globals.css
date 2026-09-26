@@ -1,0 +1,297 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-fraunces);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-seq-100: var(--chart-seq-100);
+  --color-chart-seq-300: var(--chart-seq-300);
+  --color-chart-seq-500: var(--chart-seq-500);
+  --color-chart-seq-700: var(--chart-seq-700);
+  --color-chart-seq-900: var(--chart-seq-900);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+
+  --color-sale: var(--sale);
+  --color-sale-foreground: var(--sale-foreground);
+  --color-sale-price: var(--sale-price);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-info: var(--info);
+  --color-stock-in: var(--stock-in);
+  --color-stock-low: var(--stock-low);
+  --color-stock-out: var(--stock-out);
+  --color-rating: var(--rating);
+  --color-rating-empty: var(--rating-empty);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Tinted elevation. Shadows are tinted with the brand near-black rather than pure
+   black so elevation reads warm on the aubergine palette instead of grey.
+   The alpha is kept INSIDE the value via color-mix: Tailwind inlines @theme values
+   into each utility at build time, so a bare `oklch(... / 0.1)` would be frozen and
+   a .dark override of --shadow-* would be dead code. Referencing a var keeps the
+   utility themeable, because the var re-resolves against the cascade at runtime. */
+@theme {
+  --shadow-2xs: 0 1px 2px -1px
+    color-mix(in oklab, var(--elevation-tint) 6%, transparent);
+  --shadow-xs: 0 1px 2px
+    color-mix(in oklab, var(--elevation-tint) 7%, transparent);
+  --shadow-sm:
+    0 1px 3px 0 color-mix(in oklab, var(--elevation-tint) 8%, transparent),
+    0 1px 2px -1px color-mix(in oklab, var(--elevation-tint) 8%, transparent);
+  --shadow-md:
+    0 4px 6px -1px color-mix(in oklab, var(--elevation-tint) 10%, transparent),
+    0 2px 4px -2px color-mix(in oklab, var(--elevation-tint) 10%, transparent);
+  --shadow-lg:
+    0 10px 15px -3px color-mix(in oklab, var(--elevation-tint) 12%, transparent),
+    0 4px 6px -4px color-mix(in oklab, var(--elevation-tint) 12%, transparent);
+  --shadow-xl:
+    0 20px 25px -5px color-mix(in oklab, var(--elevation-tint) 14%, transparent),
+    0 8px 10px -6px color-mix(in oklab, var(--elevation-tint) 14%, transparent);
+  --shadow-2xl: 0 25px 50px -12px
+    color-mix(in oklab, var(--elevation-tint) 20%, transparent);
+}
+
+:root {
+  /* primitives: brand */
+  --brand-50: oklch(0.975 0.012 -33);
+  --brand-100: oklch(0.945 0.028 -33);
+  --brand-200: oklch(0.885 0.055 -33);
+  --brand-300: oklch(0.795 0.085 -33);
+  --brand-400: oklch(0.685 0.11 -33);
+  --brand-500: oklch(0.575 0.125 -33);
+  --brand-600: oklch(0.465 0.12 -33);
+  --brand-700: oklch(0.36 0.1 -33);
+  --brand-800: oklch(0.265 0.072 -33);
+  --brand-900: oklch(0.185 0.048 -33);
+  --brand-950: oklch(0.12 0.028 -33);
+
+  /* primitives: flare */
+  --flare: oklch(0.858 0.19 118);
+  --flare-hover: oklch(0.8 0.17 118);
+  --flare-active: oklch(0.72 0.15 118);
+
+  /* primitives: ink */
+  --ink-300: oklch(0.667 0.02 -33);
+  --ink-500: oklch(0.528 0.018 -33);
+  --ink-700: oklch(0.36 0.018 -33);
+  --ink-900: oklch(0.19 0.015 -33);
+
+  /* primitives: paper */
+  --paper-0: oklch(0.995 0.002 -33);
+  --paper-50: oklch(0.975 0.005 -33);
+  --paper-100: oklch(0.945 0.008 -33);
+  --paper-200: oklch(0.905 0.012 -33);
+  --paper-300: oklch(0.865 0.014 -33);
+  --paper-400: oklch(0.78 0.016 -33);
+  --paper-500: oklch(0.7 0.014 -33);
+  --paper-600: oklch(0.62 0.012 -33);
+  --paper-700: oklch(0.5 0.01 -33);
+  --paper-800: oklch(0.38 0.008 -33);
+  --paper-900: oklch(0.28 0.006 -33);
+  --paper-950: oklch(0.2 0.005 -33);
+
+  /* primitives: star */
+  --star-500: oklch(0.631 0.13 80);
+
+  /* primitives: focus */
+  --focus: oklch(0.33 0.12 -33);
+
+  /* primitives: elevation. Neutral black on dark, where a tinted shadow goes muddy
+     and has to work harder against an already-dark surface. */
+  --elevation-tint: oklch(0.19 0.015 -33);
+
+  /* semantics: shadcn contract */
+  --background: var(--paper-0);
+  --foreground: var(--ink-900);
+  --card: var(--paper-0);
+  --card-foreground: var(--ink-900);
+  --popover: var(--paper-0);
+  --popover-foreground: var(--ink-900);
+  --primary: var(--brand-600);
+  --primary-foreground: var(--paper-0);
+  --secondary: var(--paper-200);
+  --secondary-foreground: var(--ink-900);
+  --muted: var(--paper-100);
+  --muted-foreground: var(--ink-500);
+  --accent: var(--paper-300);
+  --accent-foreground: var(--ink-900);
+  --destructive: oklch(0.5 0.201 27);
+  --border: var(--paper-300);
+  --input: var(--ink-300);
+  --ring: var(--focus);
+
+  /* semantics: categorical charts */
+  --chart-1: oklch(0.682 0.14 -33);
+  --chart-2: oklch(0.653 0.111 205);
+  --chart-3: oklch(0.65 0.15 145);
+  --chart-4: oklch(0.668 0.136 85);
+  --chart-5: oklch(0.687 0.18 15);
+
+  /* semantics: sequential charts */
+  --chart-seq-100: oklch(0.93 0.061 -33);
+  --chart-seq-300: oklch(0.8 0.15 -33);
+  --chart-seq-500: oklch(0.65 0.15 -33);
+  --chart-seq-700: oklch(0.5 0.15 -33);
+  --chart-seq-900: oklch(0.36 0.15 -33);
+
+  /* semantics: shop - sale */
+  --sale: var(--flare);
+  --sale-foreground: oklch(0.356 0.081 118);
+  --sale-price: oklch(0.518 0.134 128);
+
+  /* semantics: shop - status and stock */
+  --success: oklch(0.514 0.134 152);
+  --warning: oklch(0.532 0.111 75);
+  --info: oklch(0.526 0.131 245);
+  --stock-in: var(--success);
+  --stock-low: var(--warning);
+  --stock-out: var(--destructive);
+
+  /* semantics: shop - BGG rating */
+  --rating: var(--star-500);
+  --rating-empty: var(--ink-300);
+
+  --radius: 0.375rem;
+  --sidebar: var(--paper-0);
+  --sidebar-foreground: var(--ink-900);
+  --sidebar-primary: var(--brand-600);
+  --sidebar-primary-foreground: var(--paper-0);
+  --sidebar-accent: var(--paper-200);
+  --sidebar-accent-foreground: var(--ink-900);
+  --sidebar-border: var(--paper-300);
+  --sidebar-ring: var(--focus);
+}
+
+.dark {
+  --background: var(--paper-950);
+  --foreground: var(--paper-0);
+  --card: var(--paper-900);
+  --card-foreground: var(--paper-0);
+  --popover: var(--paper-900);
+  --popover-foreground: var(--paper-0);
+  --primary: var(--brand-300);
+  --primary-foreground: var(--paper-950);
+  --secondary: var(--paper-800);
+  --secondary-foreground: var(--paper-0);
+  --muted: var(--paper-800);
+  --muted-foreground: var(--paper-400);
+  --accent: var(--paper-700);
+  --accent-foreground: var(--paper-0);
+  --destructive: oklch(0.766 0.137 27);
+  --border: var(--paper-700);
+  --input: var(--paper-400);
+  --ring: var(--focus);
+  --focus: var(--paper-0);
+
+  /* semantics: categorical charts */
+  --chart-1: oklch(0.774 0.17 -33);
+  --chart-2: oklch(0.774 0.131 205);
+  --chart-3: oklch(0.774 0.17 145);
+  --chart-4: oklch(0.774 0.157 85);
+  --chart-5: oklch(0.774 0.133 15);
+
+  /* semantics: sequential charts */
+  --chart-seq-100: oklch(0.34 0.156 -33);
+  --chart-seq-300: oklch(0.44 0.16 -33);
+  --chart-seq-500: oklch(0.55 0.16 -33);
+  --chart-seq-700: oklch(0.66 0.16 -33);
+  --chart-seq-900: oklch(0.78 0.16 -33);
+
+  /* semantics: shop - sale price only; --sale and --sale-foreground are
+     theme-independent because the flare pill stays light in both themes */
+  --sale-price: oklch(0.738 0.15 128);
+
+  /* semantics: shop - status. --stock-* stay aliased in :root and re-resolve
+     against these per theme, so they need no dark declaration. */
+  --success: oklch(0.734 0.15 152);
+  --warning: oklch(0.756 0.15 75);
+  --info: oklch(0.746 0.139 245);
+
+  /* semantics: shop - BGG rating */
+  --rating: oklch(0.73 0.15 80);
+  --rating-empty: var(--paper-600);
+
+  --sidebar: var(--paper-950);
+  --sidebar-foreground: var(--paper-0);
+  --sidebar-primary: var(--brand-300);
+  --sidebar-primary-foreground: var(--paper-950);
+  --sidebar-accent: var(--paper-800);
+  --sidebar-accent-foreground: var(--paper-0);
+  --sidebar-border: var(--paper-700);
+  --sidebar-ring: var(--focus);
+
+  /* elevation: the tint goes neutral on dark, where an aubergine shadow goes muddy.
+     The per-step alpha is shared with light, so on dark the shadow is only a
+     supporting cue -- elevation is carried mainly by the surface ramp (paper-950
+     page -> paper-900 card) plus the border token, which is how most well-made
+     dark themes work. Raising the dark alpha would mean theming alpha per step. */
+  --elevation-tint: oklch(0 0 0);
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  /* Fraunces display axes. WONK 1 gives the playful terminals that suit a
+     boardgame shop; SOFT 0 keeps them crisp at heading sizes. opsz is left to
+     font-optical-sizing so it tracks the rendered size. */
+  .font-heading,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-variation-settings:
+      "SOFT" 0,
+      "WONK" 1;
+    font-optical-sizing: auto;
+  }
+}
