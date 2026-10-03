@@ -3,9 +3,15 @@ import type { ReactNode } from "react";
 import { Card } from "@/components/ui/card";
 
 /**
- * The `(auth)` split shell — Decision 8's reason for the group existing: no
+ * The `(auth)` shell — Decision 8's reason for the group existing: no
  * sticky storefront navbar and no footer on a sign-in page, because a signed-in
  * visitor would be looking at a `Sign In` button while signing in.
+ *
+ * A **brand band** over a centred column (spec §5.2, Decision 25), not the
+ * split it replaced. The split put a decorative `aria-hidden` column beside
+ * the form; on `/register`, whose card is seven fields tall, that left the
+ * form in a narrow column next to a mostly-empty one. The band gives the form
+ * the whole width and keeps the brand signal.
  *
  * Server component, presentational. It receives the client forms as `children`
  * and imports no store, no form, and no client component, so the four routes do
@@ -13,42 +19,72 @@ import { Card } from "@/components/ui/card";
  */
 export function AuthShell({ children }: { children: ReactNode }) {
   return (
-    // `min-h-svh`, not `flex-1`: the root `body` is `flex min-h-full flex-col`
-    // and this group is its only child, so there is no sibling for `flex-1` to
-    // share height with and the form would sit at the top of a short page.
-    <div className="grid min-h-svh lg:grid-cols-2">
+    // `flex min-h-svh flex-col`, and **not** a `grid` — A-26. The register card
+    // is taller than a short desktop viewport, so the height has to be a
+    // *minimum* the column can grow past. `flex-1` on the slot below is what
+    // centres the form on a tall page without making the page's height a fixed
+    // value the card cannot exceed.
+    //
+    // `min-h-svh` rather than `flex-1` on this root: the root `body` is
+    // `flex min-h-full flex-col` and this group is its only child, so there is
+    // no sibling for a `flex-1` to share height with.
+    <div className="flex min-h-svh flex-col">
       {/*
-        `hidden` is `display: none`, which also drops this column from the tab
-        order and the accessibility tree — so below `lg` it is gone, not merely
-        invisible (§9, EC-20). Same reasoning as the nav in site-header.tsx:30.
-        On desktop it is decorative, hence `aria-hidden`: the wordmark repeats
-        what the page's own heading already says, and a screen reader should not
-        read it twice.
-      */}
-      <aside
-        aria-hidden="true"
-        className="hidden flex-col justify-between bg-primary p-10 text-primary-foreground lg:flex"
-      >
-        <p className="font-heading text-3xl font-semibold tracking-tight">
-          Meeple Space
-        </p>
+        The band. `bg-background text-foreground` — the old
+        `bg-primary text-primary-foreground` was right for a surface filling
+        half the screen and wrong for one that does not, and §7.1 drops it for
+        the same reason: the accent colour belongs to the switcher's inactive
+        segments and `SubmitButton`, not to a decorative panel. The band
+        therefore reads as space plus a wordmark, and gets its edge from its
+        own whitespace rather than a rule — which is also how `SiteHeader` sits
+        on the background with no `border-b`.
 
-        {/*
-          The storefront's own h1, not new copy (§5.2). `text-primary-foreground`
-          rather than a muted token: on this surface the foreground *is* the
-          muted one, and the plan's design review puts the memorable move in the
-          form column's rhythm instead of a collage here.
-        */}
-        <p className="max-w-prose text-2xl leading-snug font-medium text-balance">
-          Your wonderful space for board games
-        </p>
-      </aside>
+        **No `aria-hidden`**, and the wordmark is a `<p>` rather than a heading:
+        on these routes there is no `SiteHeader`, so this is the only brand
+        signal on the screen and it is information. It is still not a heading,
+        because each of the four routes owns the page's `h1` and a second one
+        would be a document-structure problem. The old comment claimed the
+        wordmark "repeats what the page's heading already says" — it never
+        did, since `Sign in` does not say *Meeple Space*.
+
+        Centred, and sharing the slot's `max-w-md` and gutter, so the wordmark
+        and the tagline's left edges land on the card's left edge. That is the
+        one alignment the four routes get for free from here.
+      */}
+      <div className="px-4 pt-10 pb-8 md:px-6 md:pt-14 md:pb-10">
+        <div className="mx-auto w-full max-w-md text-center">
+          <p className="font-heading text-3xl font-semibold tracking-tight">
+            Meeple Space
+          </p>
+
+          {/* The storefront's own line, not new copy (§5.2), and
+              `text-muted-foreground` per §7.1's brand-band row. */}
+          <p className="mt-1.5 text-sm text-balance text-muted-foreground">
+            Your wonderful space for board games
+          </p>
+        </div>
+      </div>
 
       {/* The page gutter, reused from the storefront rails
           (`mx-auto w-full max-w-7xl px-4 md:px-6`) so the form's left edge
-          lines up with everything else at `lg`. */}
-      <div className="flex w-full items-center justify-center px-4 py-12 md:px-6 lg:py-16">
-        <div className="w-full max-w-md">{children}</div>
+          lines up with everything else at `lg`.
+
+          `flex-1` is A-26's fix and it is load-bearing: with `items-center`
+          against a *fixed* height, a card taller than that height overflows in
+          both directions and its top — the heading and the first field — is
+          clipped and unreachable. Here the page is at least `min-h-svh` and
+          grows with the card, so `flex-1` centres on a tall page and simply
+          does nothing on a short one.
+
+          `gap-6` lives on this inner column rather than on the outer flex row.
+          A row's `gap` is between its children, and its only child here is
+          this column, so a `gap-6` on the row would be inert — the switcher and
+          the card are two children of *this* column, because a page returns a
+          fragment and both land in the same `max-w-md`. One gap, in one place,
+          for all four routes: it is why `/forgot-password`'s own `gap-6` wrapper
+          is redundant. */}
+      <div className="flex flex-1 items-center justify-center px-4 py-12 md:px-6 lg:py-16">
+        <div className="flex w-full max-w-md flex-col gap-6">{children}</div>
       </div>
     </div>
   );

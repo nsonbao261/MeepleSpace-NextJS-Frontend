@@ -21,7 +21,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function ForgotPasswordPage() {
   return (
-    <div className="flex flex-col gap-6">
+    // A fragment, like the two mode pages. This route's own `flex flex-col
+    // gap-6` wrapper is gone because the shell's centred column now is exactly
+    // that — same display, same direction, same 24px — and the three elements
+    // below land in it directly. The spacing is unchanged, which was the
+    // condition for removing the wrapper rather than leaving it.
+    <>
       <div>
         <h1 className="text-2xl font-semibold tracking-tight">
           Forgot password
@@ -33,15 +38,19 @@ export default function ForgotPasswordPage() {
 
       <ForgotPasswordForm />
 
-      {/* `buttonVariants` on a bare `next/link`, never `Button render={<Link />}`
-          (landing A-8, §5.9), and the same link treatment as the switch on
-          `/login` (design review item 2). */}
+      {/*
+        The `Sign in` back-link **stays** (Decision 26, §5.2). This route is not
+        one of the switcher's two options, so it gets no switcher and keeps the
+        single way back. `buttonVariants` on a bare `next/link`, never
+        `Button render={<Link />}`, which merges `type="button"` onto an anchor
+        (landing A-8, §5.9) — the same rule as the switcher's two segments.
+      */}
       <p className="text-center text-sm text-muted-foreground">
         Remembered it?{" "}
         <Link href="/login" className={buttonVariants({ variant: "link" })}>
           Sign in
         </Link>
       </p>
-    </div>
+    </>
   );
 }

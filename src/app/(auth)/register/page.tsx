@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { AuthCard } from "@/components/auth/auth-shell";
+import { AuthSwitcher } from "@/components/auth/auth-switcher";
 import { RegisterForm } from "@/components/auth/register-form";
-import { buttonVariants } from "@/components/ui/button";
 
 /**
  * `/register`, the second of the four `(auth)` routes.
@@ -17,30 +16,25 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RegisterPage() {
   return (
-    <AuthCard>
-      {/* The page's own `h1`, which is why the brand column's wordmark is a
-          `<p>` and not a second heading (`auth-shell.tsx`). */}
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">
-          Create account
-        </h1>
-        <p className="mt-1.5 text-sm text-muted-foreground">
-          Start collecting your shelf in minutes.
-        </p>
-      </div>
+    // The same fragment as `/login`, for the same reason: two children of the
+    // shell's centred column, separated by its `gap-6`.
+    <>
+      <AuthSwitcher active="register" />
 
-      <RegisterForm />
+      <AuthCard>
+        {/* The page's own `h1`, which is why the shell's wordmark is a `<p>`
+            and not a second heading (`auth-shell.tsx`). */}
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">
+            Create account
+          </h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Start collecting your shelf in minutes.
+          </p>
+        </div>
 
-      {/* The switch back to `/login` (§5.2, Decision 18). `buttonVariants` on a
-          bare `next/link`, never `Button render={<Link />}`, which merges
-          `type="button"` onto an anchor (landing A-8, §5.9) — the same
-          reasoning as `site-footer.tsx:80`. */}
-      <p className="text-center text-sm text-muted-foreground">
-        Already have an account?{" "}
-        <Link href="/login" className={buttonVariants({ variant: "link" })}>
-          Sign in
-        </Link>
-      </p>
-    </AuthCard>
+        <RegisterForm />
+      </AuthCard>
+    </>
   );
 }

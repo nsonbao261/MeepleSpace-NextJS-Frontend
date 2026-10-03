@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 
 import { AuthCard } from "@/components/auth/auth-shell";
+import { AuthSwitcher } from "@/components/auth/auth-switcher";
 import { LoginForm } from "@/components/auth/login-form";
-import { buttonVariants } from "@/components/ui/button";
 
 /**
  * `/login`, the first of the four `(auth)` routes.
@@ -19,30 +18,27 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function LoginPage() {
   return (
-    <AuthCard>
-      {/* The page's own `h1`, which is why the brand column's wordmark is a
-          `<p>` and not a second heading (`auth-shell.tsx`). Fraunces comes from
-          the base layer's `h1`–`h6` rule; only the size is set here. */}
-      <div>
-        <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
-        <p className="mt-1.5 text-sm text-muted-foreground">
-          Welcome back. Sign in to your Meeple Space account.
-        </p>
-      </div>
+    // A fragment, so the switcher and the card are two children of the shell's
+    // centred column and inherit its `gap-6`. The switcher sits **outside** the
+    // card because it is chrome (§5.2): inside, it would be part of a surface
+    // whose height the register form changes, and it would read as one more
+    // field of the form.
+    <>
+      <AuthSwitcher active="signin" />
 
-      <LoginForm />
+      <AuthCard>
+        {/* The page's own `h1`, which is why the shell's wordmark is a `<p>` and
+            not a second heading (`auth-shell.tsx`). Fraunces comes from the base
+            layer's `h1`–`h6` rule; only the size is set here. */}
+        <div>
+          <h1 className="text-2xl font-semibold tracking-tight">Sign in</h1>
+          <p className="mt-1.5 text-sm text-muted-foreground">
+            Welcome back. Sign in to your Meeple Space account.
+          </p>
+        </div>
 
-      {/* The `Sign up` switch (§5.2, Decision 18), deferred from Step 6 by A-20:
-          `/register` did not exist then, and `typedRoutes: true` makes a `Link`
-          to a missing route a compile error. `buttonVariants` on a bare
-          `next/link`, never `Button render={<Link />}`, which merges
-          `type="button"` onto an anchor (landing A-8, §5.9). */}
-      <p className="text-center text-sm text-muted-foreground">
-        New to Meeple Space?{" "}
-        <Link href="/register" className={buttonVariants({ variant: "link" })}>
-          Create an account
-        </Link>
-      </p>
-    </AuthCard>
+        <LoginForm />
+      </AuthCard>
+    </>
   );
 }
