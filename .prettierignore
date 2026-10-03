@@ -1,0 +1,11 @@
+.next
+node_modules
+package-lock.json
+public
+.agents
+src/components/ui
+
+scripts
+
+specs
+PROMPT.md
