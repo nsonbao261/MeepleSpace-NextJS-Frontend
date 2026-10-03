@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 import { Card } from "@/components/ui/card";
 
@@ -39,13 +40,19 @@ export function AuthShell({ children }: { children: ReactNode }) {
         own whitespace rather than a rule — which is also how `SiteHeader` sits
         on the background with no `border-b`.
 
-        **No `aria-hidden`**, and the wordmark is a `<p>` rather than a heading:
-        on these routes there is no `SiteHeader`, so this is the only brand
-        signal on the screen and it is information. It is still not a heading,
-        because each of the four routes owns the page's `h1` and a second one
-        would be a document-structure problem. The old comment claimed the
-        wordmark "repeats what the page's heading already says" — it never
-        did, since `Sign in` does not say *Meeple Space*.
+        **No `aria-hidden`**, and the wordmark is not a heading: on these
+        routes there is no `SiteHeader`, so this is the only brand signal on the
+        screen and it is information. It is still not a heading, because each of
+        the four routes owns the page's `h1` and a second one would be a
+        document-structure problem. The old comment claimed the wordmark
+        "repeats what the page's heading already says" — it never did, since
+        `Sign in` does not say *Meeple Space*.
+
+        The wordmark is a `Link` to `/`, matching `SiteHeader`'s: these routes
+        have no storefront navbar, so without it there is no way back to the
+        catalog except the browser's back button. The link wraps **only** the
+        wordmark, not the tagline, so its accessible name is the brand and not
+        the brand plus the marketing line.
 
         Centred, and sharing the slot's `max-w-md` and gutter, so the wordmark
         and the tagline's left edges land on the card's left edge. That is the
@@ -53,9 +60,12 @@ export function AuthShell({ children }: { children: ReactNode }) {
       */}
       <div className="px-4 pt-10 pb-8 md:px-6 md:pt-14 md:pb-10">
         <div className="mx-auto w-full max-w-md text-center">
-          <p className="font-heading text-3xl font-semibold tracking-tight">
+          <Link
+            href="/"
+            className="inline-block font-heading text-3xl font-semibold tracking-tight transition-colors hover:text-muted-foreground"
+          >
             Meeple Space
-          </p>
+          </Link>
 
           {/* The storefront's own line, not new copy (§5.2), and
               `text-muted-foreground` per §7.1's brand-band row. */}
