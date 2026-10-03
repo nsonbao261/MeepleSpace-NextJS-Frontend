@@ -4,7 +4,6 @@ import * as React from "react";
 import { useRouter } from "next/navigation";
 import { useShallow } from "zustand/react/shallow";
 
-import { RoleBadge } from "@/components/auth/role-badge";
 import { UserAvatar } from "@/components/auth/user-avatar";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -82,13 +81,12 @@ export function AccountView() {
         />
 
         <div className="flex flex-col gap-1.5">
-          {/* The `h1` lives here rather than in the server page so the name and
-              the badge stay one visual unit; `account/page.tsx` renders no
+          {/* The `h1` lives here rather than in the server page so it sits beside
+              the avatar as one visual unit; `account/page.tsx` renders no
               heading of its own. */}
           <h1 className="font-heading text-2xl leading-tight font-semibold">
             {user.firstName} {user.lastName}
           </h1>
-          <RoleBadge role={user.role} />
         </div>
       </header>
 
@@ -149,10 +147,7 @@ function AccountSkeleton() {
     <div className="flex flex-col gap-8" aria-hidden="true">
       <div className="flex items-center gap-4">
         <Skeleton className="size-10 rounded-full" />
-        <div className="flex flex-col gap-2">
-          <Skeleton className="h-7 w-40" />
-          <Skeleton className="h-5 w-20" />
-        </div>
+        <Skeleton className="h-7 w-40" />
       </div>
 
       <div className="grid gap-5 sm:grid-cols-2">

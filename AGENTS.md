@@ -39,7 +39,7 @@ src/
 │                           # inside it (A-6: outside, sonner follows prefers-color-scheme)
 ├── components/
 │   ├── ui/                 # shadcn/ui — vendor code, Prettier-ignored, edit via CLI not by hand
-│   ├── auth/               # auth feature: RHF + zod forms, avatar, role badge, account view
+│   ├── auth/               # auth feature: RHF + zod forms, avatar, account view
 │   ├── layout/             # SiteHeader, MobileNav, AccountControl
 │   ├── product/            # product detail components
 │   ├── shared/             # cross-feature UI (ThemeToggle)

@@ -4,7 +4,6 @@ import * as React from "react";
 import Link from "next/link";
 import { useShallow } from "zustand/react/shallow";
 
-import { RoleBadge } from "@/components/auth/role-badge";
 import { UserAvatar } from "@/components/auth/user-avatar";
 import { Button, buttonVariants } from "@/components/ui/button";
 import {
@@ -123,9 +122,9 @@ export function AccountControl({ variant = "dropdown" }: AccountControlProps) {
   return (
     <DropdownMenu>
       {/* No `aria-label`: the trigger's accessible name comes from its own
-          visible text, so it names the account and its role (§5.9) and cannot
-          drift from what is on screen. An `aria-label` here would replace a
-          real name with a vague one, which is the failure WCAG 2.5.3 is about.
+          visible text, so it names the account (§5.9) and cannot drift from what
+          is on screen. An `aria-label` here would replace a real name with a
+          vague one, which is the failure WCAG 2.5.3 is about.
           The avatar is `alt=""` already, so it contributes nothing here. */}
       <DropdownMenuTrigger
         render={<Button variant="ghost" size="lg" className="pl-1.5" />}
@@ -137,13 +136,11 @@ export function AccountControl({ variant = "dropdown" }: AccountControlProps) {
         />
 
         {/* Bounded rather than free: the same trigger renders inside a `w-56`
-            mobile popup, where an unbounded name would push the badge past the
-            edge. `truncate` then does the rest. */}
+            mobile popup, where an unbounded name would overflow the edge.
+            `truncate` then does the rest. */}
         <span className="max-w-24 truncate">
           {user.firstName} {user.lastName}
         </span>
-
-        <RoleBadge role={user.role} />
       </DropdownMenuTrigger>
 
       {/* `w-56` beats the vendored `w-(--anchor-width)` default for the same
