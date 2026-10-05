@@ -24,6 +24,7 @@ This is frontend - only projects, apis will come with NestJS lated. Use mock dat
 - No unapproved code changes, always stop to show diff.
 - Follow design tokens.
 - For code review. Run typecheck, lint and format after each step completed. Run build after plan completed. Do not invoke other script unless asked.
+- Keep code comments short and precise, do not reference doc in code comments.
 
 ## Folder Structure
 

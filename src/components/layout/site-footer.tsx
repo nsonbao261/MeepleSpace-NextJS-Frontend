@@ -18,8 +18,6 @@ const SUPPORT_LINKS = [
   { label: "Contact", href: "#" },
 ] as const;
 
-// lucide-react dropped its brand marks, so these are deliberately generic:
-// labelling a Globe icon "Facebook" would be a lie on a shop we are faking anyway.
 const SOCIAL_LINKS = [
   { label: "Website", icon: GlobeIcon },
   { label: "Community", icon: MessageCircleIcon },
@@ -75,8 +73,7 @@ export function SiteFooter() {
             <ul className="mt-3 flex items-center gap-2">
               {SOCIAL_LINKS.map(({ label, icon: Icon }) => (
                 <li key={label}>
-                  {/* buttonVariants rather than <Button render={<Link/>} />:
-                      the primitive would merge type="button" onto an anchor. */}
+                  {}
                   <Link
                     href="#"
                     aria-label={label}
@@ -95,9 +92,7 @@ export function SiteFooter() {
 
         <Separator className="my-8" />
 
-        {/* Stacks on mobile, splits once there is room. The credit is plain
-            text, not a link: there is no verified URL for it, and this footer
-            already refuses to invent contact details. */}
+        {}
         <div className="flex flex-col gap-1 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 Meeple Space. All rights reserved.</p>
           <p>Designed and built by FroFroFro</p>

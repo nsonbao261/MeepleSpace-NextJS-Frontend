@@ -31,8 +31,7 @@ export function SiteHeader() {
           Meeple Space
         </Link>
 
-        {/* `hidden` is display:none, which also drops these links from the tab
-            order and the accessibility tree, so no aria-hidden is needed. */}
+        {}
         <nav
           aria-label="Main"
           className="hidden flex-1 items-center justify-center gap-6 md:flex"
@@ -51,16 +50,12 @@ export function SiteHeader() {
         <div className="ml-auto flex shrink-0 items-center gap-1 md:gap-2">
           <ThemeToggle />
 
-          {/* No count badge: there is no cart state (Decision 4). */}
+          {}
           <Button variant="ghost" size="icon" aria-label="Cart">
             <ShoppingCartIcon />
           </Button>
 
-          {/* The `hidden md:inline-flex` pair these replace lived on the two
-              `Button`s, so the wrapper owns the breakpoint now — not the
-              control. A viewport-scoped class on `AccountControl` itself would
-              hide it in `MobileNav`'s panel too, which only ever opens *below*
-              `md` and is exactly where it is needed. */}
+          {}
           <div className="hidden md:flex md:items-center">
             <AccountControl variant="dropdown" />
           </div>

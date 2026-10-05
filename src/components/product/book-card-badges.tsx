@@ -15,11 +15,6 @@ type ResolvedBadge = {
   variant?: "default" | "secondary" | "destructive";
 };
 
-/**
- * Discount percentage, rounded. Mirrors the `discountPercent` helper in
- * `queries.ts`; if the two ever disagree the rail ordering stops matching the
- * badge text, so they are worth keeping in step.
- */
 function discountPercent(game: Game): number {
   if (game.compareAtPrice === null) {
     return 0;
@@ -30,17 +25,6 @@ function discountPercent(game: Game): number {
   );
 }
 
-/**
- * The five-level precedence from spec 5.5, resolved to at most one badge.
- *
- * The caller passes `discounted` rather than this module recomputing it, so the
- * badge and the price block in `book-card.tsx` cannot disagree about whether a
- * game is on sale. A second badge slot was rejected in the spec: two colours on
- * 60 cards dilutes both signals.
- *
- * Sale and low-stock colour is applied through `className` at the call site, not
- * by extending `badgeVariants` — `badge.tsx` is vendored shadcn code.
- */
 function resolveBadge(
   game: Game,
   flags: CardFlags,

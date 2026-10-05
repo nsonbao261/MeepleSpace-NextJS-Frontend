@@ -20,13 +20,7 @@ export type Game = {
   stock: number;
   status: GameStatus;
   categories: string[];
-  /**
-   * Average rating on a 0-5 scale with one decimal place, not BGG's native 0-10,
-   * because the card renders stars. `ratingCount === 0` implies
-   * `ratingValue === 0`: the count is tested first, so the two must never
-   * disagree. The 0-10 -> 0-5 conversion is owed exactly once, at the API
-   * boundary mapper, when the real backend lands. Never leak it into components.
-   */
+
   ratingValue: number;
   ratingCount: number;
   soldCount: number;

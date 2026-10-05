@@ -5,22 +5,10 @@ import { slugify } from "@/lib/slug";
 import { CATEGORY_LABELS } from "@/constants/game-categories";
 import type { Game, GameStatus } from "@/types/game";
 
-// Fixed reference "now" so the dataset is byte-identical across machines and
-// builds. Anything recency-dependent must measure against this, never the wall
-// clock, or the generated values drift on every run.
 const REFERENCE_DATE = new Date("2026-09-26T00:00:00.000Z");
 
 const MS_PER_DAY = 86_400_000;
 
-/**
- * One placeholder cover for the whole catalog, until real product art arrives
- * with the backend. Every game points at this single file, so the storefront
- * never shows broken images and the mock stays honest about not having
- * photography yet.
- *
- * `Game.imageUrl` stays on the type: it is part of the entity contract and the
- * NestJS DTO will populate it per game. Only the mock's value is shared.
- */
 const COVER_IMAGE = "/images/cover.svg";
 
 const CATEGORIES = [
@@ -615,27 +603,13 @@ function buildGame(entry: CatalogEntry, index: number): Game {
   const ageInDays =
     (REFERENCE_DATE.getTime() - createdAt.getTime()) / MS_PER_DAY;
 
-  // Unrated is a recency state: a title that only just landed has no reviews
-  // yet. Drawn first because it constrains sales — nothing sells much in its
-  // first few months, and a top seller showing zero reviews is the exact
-  // "reads as fake" case the rating/sales correlation exists to prevent.
   const isUnrated =
     ageInDays < 150 && faker.datatype.boolean({ probability: 0.3 });
 
-  // Established titles take a long tail — the 5th power concentrates the mass
-  // near zero so Best Sellers is a recognisable elite rather than an arbitrary
-  // shuffle. Unrated titles are capped far lower, which is what keeps the
-  // unrated minority out of the Best Sellers rail.
   const soldCount = isUnrated
     ? Math.floor(faker.number.float() ** 2 * 30)
     : Math.floor(faker.number.float() ** 5 * 800);
 
-  // Correlated with soldCount, since a well-reviewed game is a game people
-  // bought. The multiplier spreads the counts so review volume across the
-  // catalog is implausibly unequal in the way real review data is. Floored at 1
-  // so a zero count means exactly one thing — genuinely unreviewed because the
-  // title is new. A never-sold game still has owners who rated it elsewhere, and
-  // without the floor "No ratings yet" would print on 700-day-old listings.
   const ratingCount = isUnrated
     ? 0
     : Math.max(
@@ -646,9 +620,6 @@ function buildGame(entry: CatalogEntry, index: number): Game {
         ),
       );
 
-  // Hard constraint, not a preference: the count is never displayed, so the card
-  // tests `ratingCount === 0` before reading this. A non-zero value beside a
-  // zero count would render "No ratings yet" over five stars.
   const ratingValue =
     ratingCount === 0
       ? 0
@@ -657,8 +628,6 @@ function buildGame(entry: CatalogEntry, index: number): Game {
           Math.round(faker.number.float({ min: 3.4, max: 4.7 }) * 10) / 10,
         );
 
-  // A deliberate draft/archived minority so the rails' status filter is proven
-  // to work rather than assumed.
   const status: GameStatus =
     index < CATALOG.length - 2
       ? "active"

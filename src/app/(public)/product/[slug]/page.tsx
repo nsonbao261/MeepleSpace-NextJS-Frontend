@@ -97,7 +97,7 @@ export default async function ProductPage({
             )}
           </div>
 
-          {/* Pending until Step 7 introduces the shared cart-actions client leaf. */}
+          {}
           <div className="mt-6 flex flex-wrap gap-3">
             <Button className="min-w-32" disabled>
               Add to Cart
