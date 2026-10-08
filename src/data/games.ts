@@ -199,7 +199,7 @@ const CATALOG: CatalogEntry[] = [
   },
   {
     name: "The Crew",
-    publisher: "KOSMOS",
+    publisher: "Kosmos",
     publishedYear: 2019,
     playersMin: 2,
     playersMax: 5,
@@ -325,7 +325,7 @@ const CATALOG: CatalogEntry[] = [
   },
   {
     name: "Bora Bora",
-    publisher: "KOSMOS",
+    publisher: "Kosmos",
     publishedYear: 2017,
     playersMin: 2,
     playersMax: 5,
@@ -415,7 +415,7 @@ const CATALOG: CatalogEntry[] = [
   },
   {
     name: "Trajan",
-    publisher: "KOSMOS",
+    publisher: "Kosmos",
     publishedYear: 2019,
     playersMin: 2,
     playersMax: 4,
@@ -451,7 +451,7 @@ const CATALOG: CatalogEntry[] = [
   },
   {
     name: "Camel Up",
-    publisher: "KOSMOS",
+    publisher: "Kosmos",
     publishedYear: 2014,
     playersMin: 2,
     playersMax: 8,
@@ -559,7 +559,7 @@ const CATALOG: CatalogEntry[] = [
   },
   {
     name: "Targi",
-    publisher: "KOSMOS",
+    publisher: "Kosmos",
     publishedYear: 2012,
     playersMin: 2,
     playersMax: 5,
