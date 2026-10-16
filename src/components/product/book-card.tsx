@@ -8,6 +8,7 @@ import {
 } from "@/components/product/book-card-badges";
 import { CartActions } from "@/components/product/cart-actions";
 import { RatingStars } from "@/components/product/rating-stars";
+import { WishlistButton } from "@/components/product/wishlist-button";
 import { categoryLabel } from "@/constants/game-categories";
 import { formatPrice } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -17,12 +18,19 @@ function isDiscounted(game: Game): boolean {
   return game.compareAtPrice !== null && game.compareAtPrice > game.price;
 }
 
+const DEFAULT_SIZES =
+  "(min-width: 1280px) 296px, (min-width: 1024px) 31vw, (min-width: 640px) 46vw, 80vw";
+
 export function BookCard({
   game,
   flags = {},
+  showWishlist = false,
+  sizes = DEFAULT_SIZES,
 }: {
   game: Game;
   flags?: CardFlags;
+  showWishlist?: boolean;
+  sizes?: string;
 }) {
   const discounted = isDiscounted(game);
   const outOfStock = game.stock === 0;
@@ -46,7 +54,7 @@ export function BookCard({
             alt={game.name}
             fill
 
-            sizes="(min-width: 1280px) 296px, (min-width: 1024px) 31vw, (min-width: 640px) 46vw, 80vw"
+            sizes={sizes}
             className="object-cover"
           />
         </Link>
@@ -54,6 +62,13 @@ export function BookCard({
         <div className="pointer-events-none absolute top-2 left-2">
           <BookCardBadge game={game} flags={flags} discounted={discounted} />
         </div>
+
+        {}
+        {showWishlist && (
+          <div className="absolute top-2 right-2 z-10">
+            <WishlistButton gameName={game.name} />
+          </div>
+        )}
       </div>
 
       {}

@@ -34,6 +34,10 @@ npm run verify        # lint + typecheck + format:check — the gate
 There are **no tests**. `npm run verify` + `npm run build` is the gate. Add shadcn components on
 demand with `npx shadcn@latest add <name>`; they land as source in `src/components/ui/`.
 
+The catalog's client controls use **`nuqs`** (`^2.10.1`) for URL state, with a `NuqsAdapter`
+wrapping `{children}` in `src/app/layout.tsx`. The catalog page's own `searchParams` read stays the
+authority — nuqs is not (see **Catalog** below).
+
 ## Design tokens
 
 `globals.css` is the whole system. `--brand-*` is the aubergine ramp, `--paper-*` / `--ink-*` the
@@ -55,26 +59,49 @@ neutrals, `--flare` the single promotion accent, `--star-500` the rating colour,
 src/
 ├── app/
 │   ├── (public)/         storefront routes with SiteHeader + SiteFooter; mounts a TooltipProvider
+│   │                     and holds /catalog — the app's only dynamic (ƒ) route
 │   ├── (auth)/           the four auth routes, split brand/form shell; own TooltipProvider
 │   └── globals.css       design tokens — never a second CSS file
 ├── components/
 │   ├── ui/               shadcn vendor code (Base UI primitives, base-nova style)
 │   ├── auth/             RHF + zod forms, avatar, account view
+│   ├── catalog/          /catalog chrome: toolbar, facets, sidebar, sheet, results, pagination
 │   ├── layout/           SiteHeader, MobileNav, ScrolledBar, AccountControl, SiteFooter
-│   ├── product/          card, rails, badges, cart actions, carousel viewport
+│   ├── product/          card, rails, badges, cart actions, carousel viewport, wishlist button
 │   ├── hero/             landing hero + cover fan
 │   └── shared/           ThemeToggle
 ├── providers/            app-wide client singletons (ThemeProvider) — a sibling of components/
 ├── stores/auth-store.ts  MOCK auth: zustand + persist on localStorage
-├── lib/                  cn, format, slug, auth-schemas (zod), queries (read layer)
-├── constants/            static lookup tables (game categories)
+├── lib/                  cn, format, slug, auth-schemas (zod), catalog-params (URL contract), queries (read layer)
+├── constants/            static lookup tables (game categories, catalog facets)
 ├── data/                 server-only, faker-seeded MOCK data — deleted when the backend lands
 └── types/                entity contracts; mirror the future NestJS DTOs
 ```
 
 `(admin)` is planned but not created. `src/hooks/` and `src/services/` are empty placeholders.
 Client components outside `ui/`: `theme-toggle`, `mobile-nav`, `scrolled-bar`, `account-control`,
-`cart-actions`, `carousel-viewport`, and everything under `components/auth/`.
+`cart-actions`, `carousel-viewport`, `wishlist-button`, the six `catalog/` islands
+(`catalog-toolbar`, `catalog-search`, `catalog-sort`, `catalog-facets`, `catalog-sheet`,
+`catalog-page-canonicaliser`) and everything under `components/auth/`.
+
+## Catalog
+
+`/catalog` is the app's only dynamic route (`ƒ`) — it reads `searchParams`. **Read the URL contract
+in `src/lib/catalog-params.ts` before touching a control**: 13 parameters (`q`, `category`,
+`publisher`, `priceMin`, `priceMax`, `rating`, `players`, `time`, `age`, `badge`, `sort`, `dir`,
+`page`), defaults omitted, repeated params for the multi-select facets, malformed enum/integer
+values dropped and `priceMin`/`priceMax` swapped rather than thrown. The page parses `searchParams`
+once and hands the same `CatalogFilters` to both the query layer and the controls, so a control and
+the grid cannot disagree.
+
+`src/lib/queries.ts` is `server-only` (it reaches into the faker-seeded `src/data/`), so **nothing
+under `src/components/catalog/` may import it** — filters and facet counts reach the controls as
+props from the server page. `queryCatalog` is the read layer's catalog entry point; it returns the
+filtered items plus the clamped `filters`, `priceBounds`, the publisher/category lists and the facet
+counts.
+
+`SectionHeading`'s `viewAllHref` is a typed `Route`, not a hash-only string — the landing rails'
+*View all* links point at `/catalog?badge=…`.
 
 ## Workflow
 
@@ -82,6 +109,7 @@ Spec-driven, per feature, under `specs/<feature>/`: `specification.md` (overview
 in/out of scope, decisions, edge cases), then `plan.md` (ordered steps with checkboxes,
 dependencies, files touched, done-when). Implement one step at a time and stop for review at each
 step boundary.
+
 - Check format and verify after each step, `npm run build` after the last.
 
 **`specs/` and `PROMPT.md` are gitignored** — they are local-only and will not appear in a clean

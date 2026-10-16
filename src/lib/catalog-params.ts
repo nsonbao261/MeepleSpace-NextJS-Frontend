@@ -1,4 +1,5 @@
 import { z } from "zod";
+import type { Route } from "next";
 
 import { CATALOG_PATH, SORT_DEFAULT_DIR } from "@/constants/catalog-filters";
 import {
@@ -146,7 +147,38 @@ export function withCatalogFilters(
   };
 }
 
-export function buildCatalogHref(filters: CatalogFilters): string {
+export function countActiveFilters(filters: CatalogFilters): number {
+  let count = 0;
+
+  if (filters.q !== "") {
+    count++;
+  }
+
+  count += filters.categories.length;
+  if (filters.publisher !== null) {
+    count++;
+  }
+
+  if (filters.priceMin !== null || filters.priceMax !== null) {
+    count++;
+  }
+
+  if (filters.rating !== null) {
+    count++;
+  }
+
+  count += filters.players.length;
+  count += filters.playTimes.length;
+  if (filters.ageMax !== null) {
+    count++;
+  }
+
+  count += filters.badges.length;
+
+  return count;
+}
+
+export function buildCatalogHref(filters: CatalogFilters): Route {
   const params = new URLSearchParams();
 
   if (filters.q !== "") {
@@ -203,5 +235,5 @@ export function buildCatalogHref(filters: CatalogFilters): string {
 
   const query = params.toString();
 
-  return query === "" ? CATALOG_PATH : `${CATALOG_PATH}?${query}`;
+  return (query === "" ? CATALOG_PATH : `${CATALOG_PATH}?${query}`) as Route;
 }

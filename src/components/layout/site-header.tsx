@@ -8,7 +8,7 @@ import { ScrolledBar } from "@/components/layout/scrolled-bar";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 const NAV_LINKS: NavLink[] = [
-  { label: "Catalog", href: "#catalog" },
+  { label: "Catalog", href: "/catalog" },
   { label: "About Us", href: "#" },
   { label: "Contact Us", href: "#" },
 ];

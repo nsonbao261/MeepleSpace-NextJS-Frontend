@@ -2,6 +2,7 @@
 
 import type { ReactNode } from "react";
 import Link from "next/link";
+import type { Route } from "next";
 import { MenuIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,7 +14,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-export type NavLink = { label: string; href: `#${string}` };
+export type NavLink = { label: string; href: Route };
 
 export function MobileNav({
   links,

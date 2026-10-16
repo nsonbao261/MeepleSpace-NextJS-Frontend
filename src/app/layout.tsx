@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Fraunces, Geist, Geist_Mono } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -39,7 +40,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <NuqsAdapter>{children}</NuqsAdapter>
           <Toaster />
         </ThemeProvider>
       </body>

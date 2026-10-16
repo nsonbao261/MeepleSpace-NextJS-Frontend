@@ -1,7 +1,12 @@
+import type { Route } from "next";
+
 import { BookCard } from "@/components/product/book-card";
 import { CarouselViewport } from "@/components/product/carousel-viewport";
 import { SectionHeading } from "@/components/product/section-heading";
 import { buttonVariants } from "@/components/ui/button";
+import { buildCatalogHref } from "@/lib/catalog-params";
+import { DEFAULT_CATALOG_FILTERS } from "@/constants/catalog-filters";
+import type { BadgeFilter } from "@/types/catalog";
 import {
   CarouselContent,
   CarouselItem,
@@ -18,6 +23,12 @@ import {
 import type { Game } from "@/types/game";
 
 const FULL_RAIL_SIZE = 8;
+
+const RAIL_BADGES: Record<string, BadgeFilter> = {
+  "new-arrivals": "new",
+  "best-sellers": "best",
+  "on-sale": "sale",
+};
 
 export type MerchandisingFlags = {
   newIds: Set<string>;
@@ -39,12 +50,17 @@ export function ProductRail({
 }) {
   const showArrows = games.length >= FULL_RAIL_SIZE;
 
+  const badge = RAIL_BADGES[id];
+  const viewAllHref: Route = badge
+    ? buildCatalogHref({ ...DEFAULT_CATALOG_FILTERS, badges: [badge] })
+    : "#catalog";
+
   const heading = (
     <SectionHeading
       id={`${id}-heading`}
       title={title}
       subline={subline}
-      viewAllHref="#"
+      viewAllHref={viewAllHref}
     />
   );
 

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { Route } from "next";
 
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -13,7 +14,7 @@ export function SectionHeading({
   title: string;
   subline: string;
 
-  viewAllHref: `#${string}`;
+  viewAllHref: Route;
 }) {
   return (
     <div className="mb-4 flex items-end justify-between gap-4">
