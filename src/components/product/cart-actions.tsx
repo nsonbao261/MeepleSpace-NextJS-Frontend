@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import {
   Tooltip,
@@ -7,50 +8,68 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 
-const CART_TOOLTIP = "Cart checkout is coming soon.";
+// BookCard is shared, so these toasts land on the landing rails too — that is
+// the intended change (Decision 22), not a side effect.
 const OUT_OF_STOCK_TOOLTIP = "This game is out of stock.";
-
-function noop() {}
 
 type ActionProps = {
   available: boolean;
-  tooltip: string;
   variant: "default" | "outline";
+  onAction: () => void;
   children: string;
 };
 
-function Action({ available, tooltip, variant, children }: ActionProps) {
+function Action({ available, variant, onAction, children }: ActionProps) {
+  const button = (
+    <Button
+      type="button"
+      variant={variant}
+      size="sm"
+      onClick={() => {
+        if (!available) {
+          return;
+        }
+
+        onAction();
+      }}
+      aria-disabled={available ? undefined : true}
+      className="flex-1 aria-disabled:opacity-50"
+    >
+      {children}
+    </Button>
+  );
+
+  if (available) {
+    return button;
+  }
+
   return (
     <Tooltip>
-      <TooltipTrigger
-        render={
-          <Button
-            type="button"
-            variant={variant}
-            size="sm"
-            onClick={noop}
-
-            aria-disabled={available ? undefined : true}
-            className="flex-1 aria-disabled:opacity-50"
-          >
-            {children}
-          </Button>
-        }
-      />
-      <TooltipContent>{tooltip}</TooltipContent>
+      <TooltipTrigger render={button} />
+      <TooltipContent>{OUT_OF_STOCK_TOOLTIP}</TooltipContent>
     </Tooltip>
   );
 }
 
 export function CartActions({ available = true }: { available?: boolean }) {
-  const tooltip = available ? CART_TOOLTIP : OUT_OF_STOCK_TOOLTIP;
-
   return (
     <div className="flex items-stretch gap-2">
-      <Action available={available} tooltip={tooltip} variant="outline">
+      <Action
+        available={available}
+        variant="outline"
+        onAction={() =>
+          toast.success("Added to cart", {
+            description: "Cart checkout is coming soon.",
+          })
+        }
+      >
         Add to Cart
       </Action>
-      <Action available={available} tooltip={tooltip} variant="default">
+      <Action
+        available={available}
+        variant="default"
+        onAction={() => toast.info("Checkout is coming soon.")}
+      >
         Buy Now
       </Action>
     </div>
