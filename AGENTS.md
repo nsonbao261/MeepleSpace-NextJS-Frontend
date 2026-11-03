@@ -39,6 +39,7 @@ src/
 │  └─ providers/        # Theme, TanStack Query, nuqs, toaster
 ├─ config/              # App configuration (scaffolded)
 ├─ constants/           # Shared constants (scaffolded)
+├─ data/                # Mock/seed data (products.mock.ts)
 ├─ enums/               # Shared enums (scaffolded)
 ├─ hooks/               # Reusable React hooks (scaffolded)
 ├─ services/            # API clients / data access (scaffolded)
@@ -58,27 +59,37 @@ specs/                  # Feature specs
 
 ## Commands
 
-| Command | Purpose |
-| --- | --- |
-| `npm install` | Install dependencies |
-| `npm run dev` | Start the dev server at http://localhost:3000 (Turbopack) |
-| `npm run build` | Create a production build |
-| `npm run start` | Serve the production build |
-| `npm run lint` | Run ESLint |
-| `npx tsc --noEmit` | Type-check (no npm script yet) |
-| `npm run format` | Format all files with Prettier |
-| `npm run format:check` | Check formatting |
-| `npm run test` | Run Vitest once |
-| `npm run test:watch` | Run Vitest in watch mode |
-| `npm run test:coverage` | Run tests with V8 coverage |
-| `npx shadcn@latest add <component>` | Add a shadcn/ui component |
+| Command                             | Purpose                                                   |
+| ----------------------------------- | --------------------------------------------------------- |
+| `npm install`                       | Install dependencies                                      |
+| `npm run dev`                       | Start the dev server at http://localhost:3000 (Turbopack) |
+| `npm run build`                     | Create a production build                                 |
+| `npm run start`                     | Serve the production build                                |
+| `npm run lint`                      | Run ESLint                                                |
+| `npm run typecheck`                 | Type-check (`tsc --noEmit`)                               |
+| `npm run verify`                    | Gate: typecheck + lint + test                             |
+| `npm run format`                    | Format all files with Prettier                            |
+| `npm run format:check`              | Check formatting                                          |
+| `npm run test`                      | Run Vitest once                                           |
+| `npm run test:watch`                | Run Vitest in watch mode                                  |
+| `npm run test:coverage`             | Run tests with V8 coverage                                |
+| `npx shadcn@latest add <component>` | Add a shadcn/ui component                                 |
 
 - Copy `.env.example` to `.env.local` before local development (see `NEXT_PUBLIC_API_URL`).
 - Playwright has no script yet because it is not installed/configured.
-- Before finishing a task, run `npm run lint`, `npx tsc --noEmit`, and `npm run test`.
+- Before finishing a task, run `npm run format`, then `npm run verify`.
 
 ## Ruleset
+
+- No unapproved code changes, always stop and ask for confirmation.
+- No unapproved shell commands, always ask if i want to run it manually or not. Except for `npm run verify` and test commands.
+- When getting problems, present me solutions and ask for my decision. Do not automatically implement code changes.
+- When getting tasks, define the task and only load the relavant docs and skills. Do not load all docs and skills at once.
+- For Code Comments, keep it short and precise for interpretation, do not mention docs in Code Comments.
 
 ## Doc
 
 - For Project Specification, refer @docs/SPECIFICATION.md
+- For Detail Implementation Plan, refer @docs/features/<feature-name>.md.
+
+Note: Keep every doc precise and short, only include important information. Try to use plain text only to keep the doc readable.
