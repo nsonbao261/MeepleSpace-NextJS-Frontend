@@ -1,10 +1,7 @@
 import type { ReactNode } from "react";
 import { Suspense } from "react";
 
-import { LoginRequiredDialog } from "@/components/auth/login-required-dialog";
-import { SiteFooter } from "@/components/layout/site-footer";
-import { SiteHeader } from "@/components/layout/site-header";
-import { SessionFromQuery } from "@/components/session/session-from-query";
+import { LoginRequiredDialog, SessionFromQuery, SiteFooter, SiteHeader } from "@/components";
 
 /** Shell for every public route: skip link, mock session sync, header, main, footer, auth gate. */
 export default function PublicLayout({ children }: { children: ReactNode }) {

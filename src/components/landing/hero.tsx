@@ -29,7 +29,7 @@ export function Hero() {
         </div>
         <div className="relative aspect-[4/3] overflow-hidden rounded-2xl border border-primary/10 md:aspect-[5/4]">
           <Image
-            src="/assets/images/hero-board-night.png"
+            src="/assets/images/common/hero-board-night.png"
             alt="Top-down view of a board game night: a felt table with cards, dice, tokens and player pawns"
             fill
             priority

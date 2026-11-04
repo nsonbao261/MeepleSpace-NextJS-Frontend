@@ -86,6 +86,8 @@ specs/                  # Feature specs
 - When getting problems, present me solutions and ask for my decision. Do not automatically implement code changes.
 - When getting tasks, define the task and only load the relavant docs and skills. Do not load all docs and skills at once.
 - For Code Comments, keep it short and precise for interpretation, do not mention docs in Code Comments.
+- Barrel imports: every module folder under `src/` must have an `index.ts` (exceptions: `components/ui`, `test`, `app`, and `cn` from `@/lib/utils`). Import through the folder barrel (e.g. `@/store`, `@/components/landing`); `src/app` may use `@/components`. Same-folder sibling imports stay direct, and never import `@/components` from inside `src/components`.
+- Images: no top-level files in `public/assets/images` — always place them in a category subfolder (`common/`, `products/`, ...).
 
 ## Doc
 

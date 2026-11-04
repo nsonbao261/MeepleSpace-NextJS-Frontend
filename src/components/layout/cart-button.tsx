@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { ShoppingCartIcon } from "lucide-react";
 
-import { useCartStore } from "@/store/cart-store";
+import { useCartStore } from "@/store";
 
 /** Live cart badge; clamps to `99+` visually, real count stays in the label. */
 export function CartButton() {

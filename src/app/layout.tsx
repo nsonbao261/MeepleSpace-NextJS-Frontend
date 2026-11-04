@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Instrument_Serif } from "next/font/google";
 
-import { AppProviders } from "@/components/providers/app-providers";
+import { AppProviders } from "@/components";
 
 import "./globals.css";
 

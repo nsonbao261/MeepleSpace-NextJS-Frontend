@@ -11,7 +11,7 @@ import { MobileNav } from "@/components/layout/mobile-nav";
 import { NavSearch } from "@/components/layout/nav-search";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { UserMenu } from "@/components/layout/user-menu";
-import { NAV_LINKS } from "@/constants/nav";
+import { NAV_LINKS } from "@/constants";
 
 /** Sticky shell with focus order: nav → search → cart → auth. */
 export function SiteHeader() {

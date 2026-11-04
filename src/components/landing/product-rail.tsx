@@ -1,8 +1,8 @@
 import Link from "next/link";
 
-import { ProductCard } from "@/components/product/product-card";
+import { ProductCard } from "@/components/product";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
-import type { Product } from "@/types/product";
+import type { Product } from "@/types";
 
 interface ProductRailProps {
   title: string;

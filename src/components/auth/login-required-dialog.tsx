@@ -13,7 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useAuthGateStore, type GateReason } from "@/store/auth-gate-store";
+import { useAuthGateStore, type GateReason } from "@/store";
 
 const COPY: Record<GateReason, { title: string; description: string }> = {
   "buy-now": {

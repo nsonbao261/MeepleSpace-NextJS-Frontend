@@ -19,9 +19,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_LINKS } from "@/constants/nav";
-import { useCartStore } from "@/store/cart-store";
-import { useSessionStore } from "@/store/session-store";
+import { NAV_LINKS } from "@/constants";
+import { useCartStore, useSessionStore } from "@/store";
 
 /** Mobile sheet with nav, search, cart and auth; closes on navigation. */
 export function MobileNav() {

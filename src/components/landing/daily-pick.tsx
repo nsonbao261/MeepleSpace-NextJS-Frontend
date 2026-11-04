@@ -1,5 +1,5 @@
-import { ProductCard } from "@/components/product/product-card";
-import type { Product } from "@/types/product";
+import { ProductCard } from "@/components/product";
+import type { Product } from "@/types";
 
 interface DailyPickProps {
   product: Product;

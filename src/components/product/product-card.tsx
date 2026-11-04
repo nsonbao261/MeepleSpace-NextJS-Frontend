@@ -11,12 +11,9 @@ import { RatingStars } from "@/components/product/rating-stars";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
-import { formatVnd } from "@/lib/format";
-import { useAuthGateStore } from "@/store/auth-gate-store";
-import { useCartStore } from "@/store/cart-store";
-import { useSessionStore } from "@/store/session-store";
-import { useWishlistStore } from "@/store/wishlist-store";
-import type { Product } from "@/types/product";
+import { formatVnd } from "@/lib";
+import { useAuthGateStore, useCartStore, useSessionStore, useWishlistStore } from "@/store";
+import type { Product } from "@/types";
 
 interface ProductCardProps {
   product: Product;

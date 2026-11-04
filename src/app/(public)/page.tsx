@@ -1,14 +1,7 @@
 import type { Metadata } from "next";
 
-import { DailyPick } from "@/components/landing/daily-pick";
-import { Hero } from "@/components/landing/hero";
-import { ProductRail } from "@/components/landing/product-rail";
-import { TrustStrip } from "@/components/landing/trust-strip";
-import {
-  getBestSellersCached,
-  getDailyPickCached,
-  getNewArrivalsCached,
-} from "@/services/products.cache";
+import { DailyPick, Hero, ProductRail, TrustStrip } from "@/components";
+import { getBestSellersCached, getDailyPickCached, getNewArrivalsCached } from "@/services";
 
 export const metadata: Metadata = {
   title: "MeepleSpace — Board games, venues and price comparison",

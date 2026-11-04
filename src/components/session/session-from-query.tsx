@@ -3,7 +3,7 @@
 import { useQueryState } from "nuqs";
 import { useEffect } from "react";
 
-import { useSessionStore } from "@/store/session-store";
+import { useSessionStore } from "@/store";
 
 /**
  * Hydrates the mock session from `?as=user|admin`. The header reads the store

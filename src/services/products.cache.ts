@@ -3,7 +3,7 @@
 import { cacheLife } from "next/cache";
 
 import { getBestSellers, getDailyPick, getNewArrivals } from "@/services/products";
-import type { Product } from "@/types/product";
+import type { Product } from "@/types";
 
 export async function getDailyPickCached(): Promise<Product | null> {
   cacheLife("hours");

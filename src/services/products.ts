@@ -1,7 +1,7 @@
 import { getDayOfYear } from "date-fns";
 
-import { curated, products } from "@/data/products.mock";
-import type { Product } from "@/types/product";
+import { curated, products } from "@/data";
+import type { Product } from "@/types";
 
 const RAIL_SIZE = 8;
 

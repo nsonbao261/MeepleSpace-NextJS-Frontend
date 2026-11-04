@@ -22,7 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSessionStore } from "@/store/session-store";
+import { useSessionStore } from "@/store";
 
 const ACCOUNT_LINKS = [
   { label: "Wishlist", href: "/wishlist", icon: HeartIcon },

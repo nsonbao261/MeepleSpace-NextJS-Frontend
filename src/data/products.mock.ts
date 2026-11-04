@@ -1,6 +1,6 @@
-import { faker, seedFaker } from "@/lib/faker";
+import { faker, seedFaker } from "@/lib";
 
-import type { Product } from "@/types/product";
+import type { Product } from "@/types";
 
 seedFaker(42);
 
