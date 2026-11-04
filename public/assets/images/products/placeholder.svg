@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 500" width="400" height="500">
+  <!-- Placeholder board game cover (4:5). Unique per-product covers replace this in the landing sections step. -->
+  <rect width="400" height="500" fill="#f6f1e7" />
+  <circle cx="200" cy="215" r="130" fill="#ece4d3" />
+  <g transform="translate(200 245)" fill="#c2410c">
+    <circle cy="-100" r="42" />
+    <rect x="-30" y="-62" width="60" height="80" rx="30" />
+    <rect x="-105" y="-52" width="210" height="46" rx="23" />
+    <rect x="-34" y="-14" width="30" height="76" rx="15" transform="rotate(-16 -19 -14)" />
+    <rect x="4" y="-14" width="30" height="76" rx="15" transform="rotate(16 19 -14)" />
+  </g>
+</svg>
