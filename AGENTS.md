@@ -82,7 +82,7 @@ specs/                  # Feature specs
 ## Ruleset
 
 - No unapproved code changes, always stop and ask for confirmation.
-- No unapproved shell commands, always ask if i want to run it manually or not. Except for `npm run verify` and test commands.
+- No unapproved shell commands, always ask if i want to run it manually or not. Except for `npm run verify`, `npm run format` and test commands.
 - When getting problems, present me solutions and ask for my decision. Do not automatically implement code changes.
 - When getting tasks, define the task and only load the relavant docs and skills. Do not load all docs and skills at once.
 - For Code Comments, keep it short and precise for interpretation, do not mention docs in Code Comments.
