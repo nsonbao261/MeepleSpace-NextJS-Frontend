@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { DailyPick, Hero, ProductRail, TrustStrip } from "@/components";
-import { getBestSellersCached, getDailyPickCached, getNewArrivalsCached } from "@/services";
+import { getBestSellersCached, getDailyPicksCached, getNewArrivalsCached } from "@/services";
 
 export const metadata: Metadata = {
   title: "MeepleSpace — Board games, venues and price comparison",
@@ -9,10 +9,10 @@ export const metadata: Metadata = {
     "Find your next game night: shop board games at Vietnamese-market prices, discover venues, and compare deals.",
 };
 
-/** Public landing: hero, trust signals, daily pick and two cached product rails. */
+/** Public landing: hero, trust signals, daily picks and one tabbed product rail. */
 export default async function Home() {
-  const [dailyPick, bestSellers, newArrivals] = await Promise.all([
-    getDailyPickCached(),
+  const [dailyPicks, bestSellers, newArrivals] = await Promise.all([
+    getDailyPicksCached(),
     getBestSellersCached(),
     getNewArrivalsCached(),
   ]);
@@ -21,9 +21,8 @@ export default async function Home() {
     <>
       <Hero />
       <TrustStrip />
-      {dailyPick && <DailyPick product={dailyPick} />}
-      <ProductRail title="Best sellers" products={bestSellers} />
-      <ProductRail title="New arrivals" products={newArrivals} />
+      {dailyPicks.length > 0 && <DailyPick products={dailyPicks} />}
+      <ProductRail bestSellers={bestSellers} newArrivals={newArrivals} />
     </>
   );
 }
