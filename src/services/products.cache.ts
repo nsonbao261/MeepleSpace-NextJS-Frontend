@@ -2,12 +2,12 @@
 
 import { cacheLife } from "next/cache";
 
-import { getBestSellers, getDailyPick, getNewArrivals } from "@/services/products";
+import { getBestSellers, getDailyPicks, getNewArrivals } from "@/services/products";
 import type { Product } from "@/types";
 
-export async function getDailyPickCached(): Promise<Product | null> {
+export async function getDailyPicksCached(): Promise<Product[]> {
   cacheLife("hours");
-  return getDailyPick(new Date());
+  return getDailyPicks(new Date());
 }
 
 export async function getBestSellersCached(): Promise<Product[]> {
