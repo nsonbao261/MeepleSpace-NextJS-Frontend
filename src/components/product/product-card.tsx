@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { HeartIcon } from "lucide-react";
 
 import { cn } from "cn";
@@ -10,10 +9,8 @@ import { cn } from "cn";
 import { RatingStars } from "@/components/product/rating-stars";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { toast } from "@/components/ui/toast";
-import { DISCOUNT_THRESHOLD } from "@/constants";
-import { formatVnd } from "@/lib";
-import { useAuthGateStore, useCartStore, useSessionStore, useWishlistStore } from "@/store";
+import { useProductActions } from "@/hooks";
+import { formatVnd, getDiscount } from "@/lib";
 import type { Product } from "@/types";
 
 interface ProductCardProps {
@@ -24,56 +21,8 @@ interface ProductCardProps {
 
 /** Product tile with a stretched link to the detail page; actions sit above it. */
 export function ProductCard({ product, variant = "default", className }: ProductCardProps) {
-  const router = useRouter();
-  const role = useSessionStore((state) => state.role);
-  const addItem = useCartStore((state) => state.addItem);
-  const saved = useWishlistStore((state) => state.ids.includes(product.id));
-  const toggleWishlist = useWishlistStore((state) => state.toggle);
-  const openGate = useAuthGateStore((state) => state.openGate);
-
-  const outOfStock = product.stock === 0;
-  const originalPrice = product.originalPrice;
-  const hasOriginalPrice = originalPrice !== undefined && originalPrice > product.price;
-  const rawDiscount = hasOriginalPrice
-    ? ((originalPrice - product.price) / originalPrice) * 100
-    : 0;
-  const showDiscountPill = rawDiscount >= DISCOUNT_THRESHOLD;
-  const discountPercent = Math.round(rawDiscount);
-
-  const cartLine = {
-    productId: product.id,
-    slug: product.slug,
-    name: product.name,
-    price: product.price,
-    image: product.image,
-  };
-
-  function addToCart() {
-    addItem(cartLine);
-    toast.add({ type: "success", title: "Added to cart", description: product.name });
-  }
-
-  function buyNow() {
-    if (role === "guest") {
-      openGate("buy-now", `/products/${product.slug}`);
-      return;
-    }
-    addItem(cartLine);
-    router.push("/checkout");
-  }
-
-  function onWishlist() {
-    if (role === "guest") {
-      openGate("wishlist");
-      return;
-    }
-    toggleWishlist(product.id);
-    toast.add({
-      type: "success",
-      title: saved ? "Removed from wishlist" : "Saved to wishlist",
-      description: product.name,
-    });
-  }
+  const { outOfStock, saved, addToCart, buyNow, toggleSaved } = useProductActions(product);
+  const { hasDiscount, percent, showPill } = getDiscount(product.price, product.originalPrice);
 
   const feature = variant === "feature";
 
@@ -115,9 +64,9 @@ export function ProductCard({ product, variant = "default", className }: Product
             </>
           )}
         </div>
-        {showDiscountPill && (
+        {showPill && (
           <Badge variant="destructive" className="absolute top-2 right-2 z-20">
-            -{discountPercent}%
+            -{percent}%
           </Badge>
         )}
       </div>
@@ -156,9 +105,9 @@ export function ProductCard({ product, variant = "default", className }: Product
           >
             {formatVnd(product.price)}
           </span>
-          {hasOriginalPrice && (
+          {hasDiscount && product.originalPrice !== undefined && (
             <span className="text-sm text-muted-foreground tabular-nums line-through">
-              {formatVnd(product.originalPrice!)}
+              {formatVnd(product.originalPrice)}
             </span>
           )}
         </div>
@@ -194,7 +143,7 @@ export function ProductCard({ product, variant = "default", className }: Product
             aria-label={
               saved ? `Remove ${product.name} from wishlist` : `Add ${product.name} to wishlist`
             }
-            onClick={onWishlist}
+            onClick={toggleSaved}
             className={cn(
               "ml-auto min-h-11 min-w-11 md:min-h-0 md:min-w-0",
               saved && "text-destructive",
