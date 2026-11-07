@@ -13,4 +13,9 @@ export interface Product {
   salesCount: number;
   /** ISO 8601 string so it serializes safely through `use cache`. */
   createdAt: string;
+  kind: "base" | "expansion";
+  genre: string;
+  publisher: string;
+  isNew: boolean;
+  isBestSeller: boolean;
 }

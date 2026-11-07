@@ -16,6 +16,11 @@ export function getNewArrivals(): Product[] {
   return [...products].sort((a, b) => b.createdAt.localeCompare(a.createdAt)).slice(0, RAIL_SIZE);
 }
 
+/** Full catalogue of base games sorted by salesCount desc. */
+export function getCatalog(): Product[] {
+  return products.filter((p) => p.kind === "base").sort((a, b) => b.salesCount - a.salesCount);
+}
+
 /**
  * Up to four curated games per day by day-of-year index, skipping
  * out-of-stock entries without repeats. Returns fewer when the pool runs dry.

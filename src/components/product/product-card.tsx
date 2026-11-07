@@ -11,6 +11,7 @@ import { RatingStars } from "@/components/product/rating-stars";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/toast";
+import { DISCOUNT_THRESHOLD } from "@/constants";
 import { formatVnd } from "@/lib";
 import { useAuthGateStore, useCartStore, useSessionStore, useWishlistStore } from "@/store";
 import type { Product } from "@/types";
@@ -31,7 +32,13 @@ export function ProductCard({ product, variant = "default", className }: Product
   const openGate = useAuthGateStore((state) => state.openGate);
 
   const outOfStock = product.stock === 0;
-  const hasDiscount = product.originalPrice !== undefined && product.originalPrice > product.price;
+  const originalPrice = product.originalPrice;
+  const hasOriginalPrice = originalPrice !== undefined && originalPrice > product.price;
+  const rawDiscount = hasOriginalPrice
+    ? ((originalPrice - product.price) / originalPrice) * 100
+    : 0;
+  const showDiscountPill = rawDiscount >= DISCOUNT_THRESHOLD;
+  const discountPercent = Math.round(rawDiscount);
 
   const cartLine = {
     productId: product.id,
@@ -98,9 +105,19 @@ export function ProductCard({ product, variant = "default", className }: Product
           sizes={feature ? "(min-width:768px) 320px, 100vw" : "(min-width:768px) 25vw, 70vw"}
           className="object-cover"
         />
-        {outOfStock && (
-          <Badge variant="destructive" className="absolute top-2 left-2">
-            Out of stock
+        <div className="absolute top-2 left-2 z-20 flex flex-col gap-1">
+          {outOfStock ? (
+            <Badge variant="destructive">Out of stock</Badge>
+          ) : (
+            <>
+              {product.isNew && <Badge>New</Badge>}
+              {product.isBestSeller && <Badge variant="secondary">Best seller</Badge>}
+            </>
+          )}
+        </div>
+        {showDiscountPill && (
+          <Badge variant="destructive" className="absolute top-2 right-2 z-20">
+            -{discountPercent}%
           </Badge>
         )}
       </div>
@@ -139,7 +156,7 @@ export function ProductCard({ product, variant = "default", className }: Product
           >
             {formatVnd(product.price)}
           </span>
-          {hasDiscount && (
+          {hasOriginalPrice && (
             <span className="text-sm text-muted-foreground tabular-nums line-through">
               {formatVnd(product.originalPrice!)}
             </span>
