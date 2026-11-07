@@ -11,7 +11,7 @@ This block is written and re-added by `next dev` — verify at `node_modules/nex
 ## Project
 
 MeepleSpace is boardgame e-commerce in Vietnamese market, features venue discovery and price comparision. Main features: e-commerce with VNPAY, price comparision, venues discovery, wishlist, user reviews, AI Chatbot, availability notification.
-This is a frontend-only project. Backend will come later with NestJS Microservice.
+This is a frontend-only project. Backend will come later with NestJS Microservice. When implementing fuction, define what data will later get from apis, use faker mock data instead.
 
 ## Tech Stack
 
@@ -56,6 +56,7 @@ specs/                  # Feature specs
 - Keep generated shadcn/ui primitives in `src/components/ui`; app-specific components go under `src/components`.
 - Use route groups (e.g., `(auth)`, `(dashboard)`) inside `src/app` to scope layouts.
 - Root configs: `next.config.ts`, `tsconfig.json`, `components.json`, `eslint.config.mjs`, `vitest.config.mts`, `.prettierrc.json`, `.prettierignore`.
+- Use barel export with no top-level files.
 
 ## Commands
 
@@ -86,8 +87,7 @@ specs/                  # Feature specs
 - When getting problems, present me solutions and ask for my decision. Do not automatically implement code changes.
 - When getting tasks, define the task and only load the relavant docs and skills. Do not load all docs and skills at once.
 - For Code Comments, keep it short and precise for interpretation, do not mention docs in Code Comments.
-- Barrel imports: every module folder under `src/` must have an `index.ts` (exceptions: `components/ui`, `test`, `app`, and `cn` from `@/lib/utils`). Import through the folder barrel (e.g. `@/store`, `@/components/landing`); `src/app` may use `@/components`. Same-folder sibling imports stay direct, and never import `@/components` from inside `src/components`.
-- Images: no top-level files in `public/assets/images` — always place them in a category subfolder (`common/`, `products/`, ...).
+- Always ask clarifying questions. Always use question tool when asking. Question can be multi-selected.
 
 ## Doc
 

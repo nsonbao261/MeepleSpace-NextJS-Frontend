@@ -28,9 +28,13 @@ const COPY: Record<GateReason, { title: string; description: string }> = {
     title: "Log in to check out",
     description: "Your cart is waiting — log in to complete the order.",
   },
+  review: {
+    title: "Log in to review",
+    description: "Share your rating and feedback for this board game with the community.",
+  },
 };
 
-/** Shared login gate for Buy Now, wishlist and checkout. */
+/** Shared login gate for Buy Now, wishlist, checkout and reviews. */
 export function LoginRequiredDialog() {
   const open = useAuthGateStore((state) => state.open);
   const reason = useAuthGateStore((state) => state.reason);

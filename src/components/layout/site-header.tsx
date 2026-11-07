@@ -1,5 +1,6 @@
 "use client";
 
+import { Suspense } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -44,9 +45,13 @@ export function SiteHeader() {
           <ThemeToggle />
           <CartButton />
           <div className="hidden md:block">
-            <UserMenu />
+            <Suspense>
+              <UserMenu />
+            </Suspense>
           </div>
-          <MobileNav />
+          <Suspense>
+            <MobileNav />
+          </Suspense>
         </div>
       </div>
     </header>

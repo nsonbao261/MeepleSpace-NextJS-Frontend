@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-export type GateReason = "buy-now" | "wishlist" | "checkout";
+export type GateReason = "buy-now" | "wishlist" | "checkout" | "review";
 
 interface AuthGateState {
   open: boolean;
