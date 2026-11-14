@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useQueryState } from "nuqs";
 import { MenuIcon, ShoppingCartIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -20,27 +19,26 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NAV_LINKS } from "@/constants";
+import { useLogout } from "@/hooks/use-logout";
 import { useCartStore, useSessionStore } from "@/store";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Skeleton } from "@/components/ui/skeleton";
+import { getInitials } from "@/lib/format";
 
 /** Mobile sheet with nav, search, cart and auth; closes on navigation. */
 export function MobileNav() {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
-  const role = useSessionStore((state) => state.role);
-  const signOut = useSessionStore((state) => state.signOut);
+  const status = useSessionStore((state) => state.status);
+  const user = useSessionStore((state) => state.user);
+  const logout = useLogout();
   const totalQuantity = useCartStore((state) => state.totalQuantity);
-  const [, clearAs] = useQueryState("as");
 
   // Close on navigation by adjusting state during render (not in an effect).
   const [lastPathname, setLastPathname] = useState(pathname);
   if (lastPathname !== pathname) {
     setLastPathname(pathname);
     setOpen(false);
-  }
-
-  function handleLogout() {
-    signOut();
-    void clearAs(null);
   }
 
   return (
@@ -111,7 +109,9 @@ export function MobileNav() {
         <div className="mt-auto flex items-center gap-2 px-4 pb-4">
           <ThemeToggle />
           <div className="flex flex-1 flex-col gap-2">
-            {role === "guest" ? (
+            {status === "hydrating" ? (
+              <Skeleton className="h-11 w-full" />
+            ) : status === "guest" || !user ? (
               <>
                 <Button render={<Link href="/login" />} className="h-11 w-full">
                   Log in
@@ -126,10 +126,27 @@ export function MobileNav() {
               </>
             ) : (
               <>
+                <div className="flex items-center gap-3 px-1">
+                  <Avatar size="sm">
+                    {user.avatarUrl ? <AvatarImage src={user.avatarUrl} alt="" /> : null}
+                    <AvatarFallback>{getInitials(user.name)}</AvatarFallback>
+                  </Avatar>
+                  <span className="truncate text-sm font-medium">{user.name}</span>
+                </div>
+                <Button
+                  variant="outline"
+                  render={<Link href="/wishlist" />}
+                  className="h-11 w-full"
+                >
+                  Wishlist
+                </Button>
+                <Button variant="outline" render={<Link href="/orders" />} className="h-11 w-full">
+                  Order History
+                </Button>
                 <Button variant="outline" render={<Link href="/profile" />} className="h-11 w-full">
                   Profile/Settings
                 </Button>
-                <Button variant="ghost" className="h-11 w-full" onClick={handleLogout}>
+                <Button variant="ghost" className="h-11 w-full" onClick={logout}>
                   Log out
                 </Button>
               </>

@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
-import { Suspense } from "react";
 
-import { LoginRequiredDialog, SessionFromQuery, SiteFooter, SiteHeader } from "@/components";
+import { LoginRequiredDialog, SessionHydrator, SiteFooter, SiteHeader } from "@/components";
 
 /** Shell for every public route: skip link, mock session sync, header, main, footer, auth gate. */
 export default function PublicLayout({ children }: { children: ReactNode }) {
@@ -13,9 +12,7 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
       >
         Skip to content
       </a>
-      <Suspense fallback={null}>
-        <SessionFromQuery />
-      </Suspense>
+      <SessionHydrator />
       <SiteHeader />
       <main id="main" className="flex-1">
         {children}

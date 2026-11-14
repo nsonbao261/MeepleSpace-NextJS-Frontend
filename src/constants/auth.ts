@@ -1,0 +1,8 @@
+export const AUTH_CONFIG = {
+  PASSWORD_MIN_LENGTH: 8,
+  PASSWORD_MAX_LENGTH: 72,
+  MIN_AGE: 13,
+  REFRESH_COOKIE_NAME: "meeple_refresh_token",
+  TOKEN_TTL_MS: 3600 * 1000, // 1 hour
+  REMEMBER_ME_DAYS: 30,
+};

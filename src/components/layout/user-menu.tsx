@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { useQueryState } from "nuqs";
 import {
   ChevronDownIcon,
   HeartIcon,
@@ -12,7 +11,7 @@ import {
   UserRoundIcon,
 } from "lucide-react";
 
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -22,7 +21,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useSessionStore } from "@/store";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useLogout } from "@/hooks/use-logout";
+import { useSessionStore } from "@/store/session-store";
+import { getInitials } from "@/lib/format";
 
 const ACCOUNT_LINKS = [
   { label: "Wishlist", href: "/wishlist", icon: HeartIcon },
@@ -33,11 +35,16 @@ const ACCOUNT_LINKS = [
 
 /** Guests get Login/Register; signed-in users get the account dropdown. */
 export function UserMenu() {
+  const status = useSessionStore((state) => state.status);
+  const user = useSessionStore((state) => state.user);
   const role = useSessionStore((state) => state.role);
-  const signOut = useSessionStore((state) => state.signOut);
-  const [, clearAs] = useQueryState("as");
+  const logout = useLogout();
 
-  if (role === "guest") {
+  if (status === "hydrating") {
+    return <Skeleton className="h-9 w-24" />;
+  }
+
+  if (status === "guest" || !user) {
     return (
       <div className="flex items-center gap-2">
         <Button variant="outline" render={<Link href="/login" />}>
@@ -48,11 +55,7 @@ export function UserMenu() {
     );
   }
 
-  function handleLogout() {
-    signOut();
-    // Clear ?as= so SessionFromQuery cannot sign the mock user back in.
-    void clearAs(null);
-  }
+  const initials = getInitials(user.name);
 
   return (
     <DropdownMenu>
@@ -60,12 +63,14 @@ export function UserMenu() {
         render={<Button variant="ghost" className="h-11 gap-1 px-2" aria-label="Account menu" />}
       >
         <Avatar size="sm">
-          <AvatarFallback>{role === "admin" ? "AD" : "US"}</AvatarFallback>
+          {user.avatarUrl ? <AvatarImage src={user.avatarUrl} alt="" /> : null}
+          <AvatarFallback>{initials}</AvatarFallback>
         </Avatar>
+        <span className="hidden max-w-32 truncate text-sm font-medium sm:inline">{user.name}</span>
         <ChevronDownIcon aria-hidden="true" className="size-3.5 text-muted-foreground" />
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56">
-        <DropdownMenuLabel>{role === "admin" ? "Admin account" : "Your account"}</DropdownMenuLabel>
+        <DropdownMenuLabel>{user.name}</DropdownMenuLabel>
         {ACCOUNT_LINKS.map(({ label, href, icon: Icon }) => (
           <DropdownMenuItem key={href} render={<Link href={href} />}>
             <Icon aria-hidden="true" />
@@ -82,7 +87,7 @@ export function UserMenu() {
           </>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem onClick={handleLogout}>
+        <DropdownMenuItem onClick={logout}>
           <LogOutIcon aria-hidden="true" />
           Log out
         </DropdownMenuItem>

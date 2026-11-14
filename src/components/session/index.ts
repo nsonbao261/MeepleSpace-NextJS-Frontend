@@ -1,1 +1,1 @@
-export * from "./session-from-query";
+export * from "./session-hydrator";
