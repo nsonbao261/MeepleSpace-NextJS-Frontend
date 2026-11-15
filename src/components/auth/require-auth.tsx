@@ -1,10 +1,9 @@
 "use client";
 
-import { ReactNode } from "react";
+import { ReactNode, Suspense, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSessionStore } from "@/store/session-store";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEffect } from "react";
 
 export function RequireAuth({ children }: { children: ReactNode }) {
   const status = useSessionStore((s) => s.status);
@@ -16,13 +15,10 @@ export function RequireAuth({ children }: { children: ReactNode }) {
     }
   }, [status, router]);
 
-  if (status === "hydrating") {
-    return <Skeleton className="h-64 w-full" />;
-  }
-
-  if (status === "guest") {
-    return null;
-  }
-
-  return <>{children}</>;
+  return (
+    <div className="relative">
+      <Suspense fallback={<Skeleton className="h-64 w-full" />}>{children}</Suspense>
+      {status !== "authenticated" && <Skeleton className="absolute inset-0 size-full" />}
+    </div>
+  );
 }

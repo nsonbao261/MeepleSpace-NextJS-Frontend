@@ -10,6 +10,7 @@ import { cn } from "cn";
 import { NavSearch } from "@/components/layout/nav-search";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/common";
 import {
   Sheet,
   SheetContent,
@@ -113,16 +114,12 @@ export function MobileNav() {
               <Skeleton className="h-11 w-full" />
             ) : status === "guest" || !user ? (
               <>
-                <Button render={<Link href="/login" />} className="h-11 w-full">
+                <ButtonLink href="/login" className="h-11 w-full">
                   Log in
-                </Button>
-                <Button
-                  variant="outline"
-                  render={<Link href="/register" />}
-                  className="h-11 w-full"
-                >
+                </ButtonLink>
+                <ButtonLink variant="outline" href="/register" className="h-11 w-full">
                   Sign up
-                </Button>
+                </ButtonLink>
               </>
             ) : (
               <>
@@ -133,19 +130,15 @@ export function MobileNav() {
                   </Avatar>
                   <span className="truncate text-sm font-medium">{user.name}</span>
                 </div>
-                <Button
-                  variant="outline"
-                  render={<Link href="/wishlist" />}
-                  className="h-11 w-full"
-                >
+                <ButtonLink variant="outline" href="/wishlist" className="h-11 w-full">
                   Wishlist
-                </Button>
-                <Button variant="outline" render={<Link href="/orders" />} className="h-11 w-full">
+                </ButtonLink>
+                <ButtonLink variant="outline" href="/orders" className="h-11 w-full">
                   Order History
-                </Button>
-                <Button variant="outline" render={<Link href="/profile" />} className="h-11 w-full">
+                </ButtonLink>
+                <ButtonLink variant="outline" href="/profile" className="h-11 w-full">
                   Profile/Settings
-                </Button>
+                </ButtonLink>
                 <Button variant="ghost" className="h-11 w-full" onClick={logout}>
                   Log out
                 </Button>

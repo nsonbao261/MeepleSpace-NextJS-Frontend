@@ -1,42 +1,44 @@
 "use client";
 
+import * as React from "react";
 import { useState } from "react";
-import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { EyeIcon, EyeOffIcon, LockIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel, FieldContent, FieldError } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
+import { AuthField, AuthFieldProps } from "./auth-field";
 
-interface PasswordInputProps extends React.ComponentProps<typeof Input> {
+export interface PasswordInputProps extends Omit<AuthFieldProps, "icon" | "trailing" | "label"> {
   label?: string;
   error?: string;
 }
 
-export function PasswordInput({ label = "Password", error, ...props }: PasswordInputProps) {
-  const [show, setShow] = useState(false);
+export const PasswordInput = React.forwardRef<HTMLInputElement, PasswordInputProps>(
+  ({ label = "Mật khẩu", error, autoComplete = "current-password", ...props }, ref) => {
+    const [show, setShow] = useState(false);
 
-  return (
-    <Field>
-      <FieldLabel>
-        <Label>{label}</Label>
-        <FieldContent className="relative">
-          <Input
-            {...props}
-            type={show ? "text" : "password"}
-            autoComplete={props.autoComplete ?? "current-password"}
-          />
+    return (
+      <AuthField
+        ref={ref}
+        label={label}
+        error={error}
+        type={show ? "text" : "password"}
+        autoComplete={autoComplete}
+        icon={<LockIcon className="h-4 w-4" />}
+        trailing={
           <Button
             type="button"
             variant="ghost"
             size="icon"
-            className="absolute top-0 right-0 h-9 w-9"
+            className="h-11 w-11 text-muted-foreground hover:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
             onClick={() => setShow(!show)}
+            aria-label={show ? "Hide password" : "Show password"}
           >
-            {show ? <EyeOffIcon className="size-4" /> : <EyeIcon className="size-4" />}
+            {show ? <EyeOffIcon className="h-4 w-4" /> : <EyeIcon className="h-4 w-4" />}
           </Button>
-        </FieldContent>
-        {error && <FieldError>{error}</FieldError>}
-      </FieldLabel>
-    </Field>
-  );
-}
+        }
+        {...props}
+      />
+    );
+  },
+);
+
+PasswordInput.displayName = "PasswordInput";

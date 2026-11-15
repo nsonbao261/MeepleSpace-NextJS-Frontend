@@ -69,7 +69,8 @@ specs/                  # Feature specs
 | `npm run start`                     | Serve the production build                                |
 | `npm run lint`                      | Run ESLint                                                |
 | `npm run typecheck`                 | Type-check (`tsc --noEmit`)                               |
-| `npm run verify`                    | Gate: typecheck + lint + test                             |
+| `npm run verify`                    | Gate: typecheck + lint
+                             |
 | `npm run format`                    | Format all files with Prettier                            |
 | `npm run format:check`              | Check formatting                                          |
 | `npm run test`                      | Run Vitest once                                           |

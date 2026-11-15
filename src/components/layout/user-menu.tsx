@@ -13,6 +13,7 @@ import {
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/common";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -47,10 +48,10 @@ export function UserMenu() {
   if (status === "guest" || !user) {
     return (
       <div className="flex items-center gap-2">
-        <Button variant="outline" render={<Link href="/login" />}>
+        <ButtonLink variant="outline" href="/login">
           Log in
-        </Button>
-        <Button render={<Link href="/register" />}>Sign up</Button>
+        </ButtonLink>
+        <ButtonLink href="/register">Sign up</ButtonLink>
       </div>
     );
   }

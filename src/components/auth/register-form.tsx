@@ -3,6 +3,7 @@
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSearchParams, useRouter } from "next/navigation";
+import { Mail, User, Calendar } from "lucide-react";
 import { registerSchema } from "@/schemas/auth";
 import { register, AuthError } from "@/services/auth";
 import { useSessionStore } from "@/store/session-store";
@@ -10,15 +11,15 @@ import { setRefreshCookie } from "@/lib/session-cookie";
 import { isSafeNextPath } from "@/lib/safe-next";
 import { useRedirectIfAuthenticated } from "@/hooks/use-redirect-if-authenticated";
 import { Button } from "@/components/ui/button";
-import { Field, FieldLabel, FieldContent, FieldError } from "@/components/ui/field";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { Select, SelectItem } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { toast } from "@/components/ui/toast";
+import { AuthField } from "@/components/auth/auth-field";
 import { PasswordInput } from "@/components/auth/password-input";
+import { PasswordStrength } from "@/components/auth/password-strength";
 import { AvatarField } from "@/components/auth/avatar-field";
 import { z } from "zod";
+import Link from "next/link";
 
 export function RegisterForm() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export function RegisterForm() {
 
   const form = useForm<z.infer<typeof registerSchema>>({
     resolver: zodResolver(registerSchema),
+    mode: "onTouched",
     defaultValues: {
       email: "",
       password: "",
@@ -39,8 +41,10 @@ export function RegisterForm() {
       termsAccepted: false as unknown as true,
     },
   });
+
   const firstName = useWatch({ control: form.control, name: "firstName" });
   const lastName = useWatch({ control: form.control, name: "lastName" });
+  const password = useWatch({ control: form.control, name: "password" });
 
   async function onSubmit(data: z.infer<typeof registerSchema>) {
     const registerData = {
@@ -73,111 +77,171 @@ export function RegisterForm() {
   }
 
   return (
-    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-      <h1 className="text-xl font-semibold">Create Account</h1>
-      <div className="grid grid-cols-2 gap-4">
-        <Field>
-          <FieldLabel>
-            <Label>First Name</Label>
-            <FieldContent>
-              <Input {...form.register("firstName")} />
-            </FieldContent>
-            {form.formState.errors.firstName && (
-              <FieldError>{form.formState.errors.firstName.message}</FieldError>
-            )}
-          </FieldLabel>
-        </Field>
-        <Field>
-          <FieldLabel>
-            <Label>Last Name</Label>
-            <FieldContent>
-              <Input {...form.register("lastName")} />
-            </FieldContent>
-            {form.formState.errors.lastName && (
-              <FieldError>{form.formState.errors.lastName.message}</FieldError>
-            )}
-          </FieldLabel>
-        </Field>
+    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      {/* Header */}
+      <div className="space-y-1">
+        <span className="text-xs font-semibold tracking-wider text-primary uppercase">
+          Start your journey
+        </span>
+        <h1 className="text-2xl font-semibold tracking-tight">Create an account</h1>
+        <p className="text-sm text-muted-foreground">
+          Enter your details to join the MeepleSpace community
+        </p>
       </div>
-      <Field>
-        <FieldLabel>
-          <Label>Email</Label>
-          <FieldContent>
-            <Input {...form.register("email")} type="email" />
-          </FieldContent>
-          {form.formState.errors.email && (
-            <FieldError>{form.formState.errors.email.message}</FieldError>
-          )}
-        </FieldLabel>
-      </Field>
-      <PasswordInput
-        {...form.register("password")}
-        label="Password"
-        autoComplete="new-password"
-        error={form.formState.errors.password?.message}
-      />
-      <PasswordInput
-        {...form.register("passwordConfirmation")}
-        label="Confirm Password"
-        autoComplete="new-password"
-        error={form.formState.errors.passwordConfirmation?.message}
-      />
-      <Field>
-        <FieldLabel>
-          <Label>Date of Birth</Label>
-          <FieldContent>
-            <Input {...form.register("dateOfBirth")} type="date" />
-          </FieldContent>
-          {form.formState.errors.dateOfBirth && (
-            <FieldError>{form.formState.errors.dateOfBirth.message}</FieldError>
-          )}
-        </FieldLabel>
-      </Field>
-      <Field>
-        <FieldLabel>
-          <Label>Gender</Label>
-          <FieldContent>
-            <Controller
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectItem value="male">Male</SelectItem>
-                  <SelectItem value="female">Female</SelectItem>
-                  <SelectItem value="non-binary">Non-binary</SelectItem>
-                  <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
-                </Select>
+
+      {/* Group 1: Account */}
+      <div className="space-y-4">
+        <div className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Account credentials
+        </div>
+        <div className="space-y-4 rounded-2xl border border-border/60 bg-card/50 p-4">
+          <AuthField
+            {...form.register("email")}
+            label="Email"
+            type="email"
+            placeholder="name@example.com"
+            autoComplete="email"
+            icon={<Mail className="size-4" />}
+            error={form.formState.errors.email?.message}
+          />
+
+          <div className="space-y-2">
+            <PasswordInput
+              {...form.register("password")}
+              label="Password"
+              placeholder="••••••••"
+              autoComplete="new-password"
+              error={form.formState.errors.password?.message}
+            />
+            <PasswordStrength value={password || ""} />
+          </div>
+
+          <PasswordInput
+            {...form.register("passwordConfirmation")}
+            label="Confirm Password"
+            placeholder="••••••••"
+            autoComplete="new-password"
+            error={form.formState.errors.passwordConfirmation?.message}
+          />
+        </div>
+      </div>
+
+      {/* Group 2: Profile */}
+      <div className="space-y-4">
+        <div className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Personal profile
+        </div>
+        <div className="space-y-4 rounded-2xl border border-border/60 bg-card/50 p-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <AuthField
+              {...form.register("firstName")}
+              label="First Name"
+              placeholder="Nguyen"
+              autoComplete="given-name"
+              icon={<User className="size-4" />}
+              error={form.formState.errors.firstName?.message}
+            />
+            <AuthField
+              {...form.register("lastName")}
+              label="Last Name"
+              placeholder="An"
+              autoComplete="family-name"
+              icon={<User className="size-4" />}
+              error={form.formState.errors.lastName?.message}
+            />
+          </div>
+
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+            <AuthField
+              {...form.register("dateOfBirth")}
+              label="Date of Birth"
+              type="date"
+              autoComplete="bday"
+              icon={<Calendar className="size-4" />}
+              error={form.formState.errors.dateOfBirth?.message}
+            />
+
+            <div className="space-y-1.5">
+              <label className="text-xs font-medium tracking-wide text-muted-foreground uppercase">
+                Gender
+              </label>
+              <Controller
+                control={form.control}
+                name="gender"
+                render={({ field }) => (
+                  <Select value={field.value} onValueChange={field.onChange}>
+                    <SelectItem value="male">Male</SelectItem>
+                    <SelectItem value="female">Female</SelectItem>
+                    <SelectItem value="non-binary">Non-binary</SelectItem>
+                    <SelectItem value="prefer-not-to-say">Prefer not to say</SelectItem>
+                  </Select>
+                )}
+              />
+              {form.formState.errors.gender && (
+                <p className="text-xs text-destructive">{form.formState.errors.gender.message}</p>
               )}
-            />
-          </FieldContent>
-          {form.formState.errors.gender && (
-            <FieldError>{form.formState.errors.gender.message}</FieldError>
+            </div>
+          </div>
+
+          <AvatarField
+            name={`${firstName || ""} ${lastName || ""}`}
+            onChange={(url) => form.setValue("avatarUrl", url)}
+            error={form.formState.errors.avatarUrl?.message}
+          />
+        </div>
+      </div>
+
+      {/* Group 3: Consent */}
+      <div className="space-y-4">
+        <div className="text-xs font-semibold tracking-wider text-muted-foreground uppercase">
+          Terms &amp; Consent
+        </div>
+        <div className="space-y-2 rounded-2xl border border-border/60 bg-card/50 p-4">
+          <Controller
+            control={form.control}
+            name="termsAccepted"
+            render={({ field }) => (
+              <label className="flex cursor-pointer items-start gap-3 text-sm text-muted-foreground hover:text-foreground">
+                <Checkbox
+                  checked={field.value}
+                  onCheckedChange={(checked) => field.onChange(checked === true)}
+                  className="mt-0.5"
+                />
+                <span>
+                  I agree to the{" "}
+                  <Link
+                    href="/terms"
+                    target="_blank"
+                    className="font-medium text-primary hover:underline"
+                  >
+                    Terms of Service
+                  </Link>{" "}
+                  and{" "}
+                  <Link
+                    href="/privacy"
+                    target="_blank"
+                    className="font-medium text-primary hover:underline"
+                  >
+                    Privacy Policy
+                  </Link>
+                </span>
+              </label>
+            )}
+          />
+          {form.formState.errors.termsAccepted && (
+            <p className="text-xs font-medium text-destructive">
+              {form.formState.errors.termsAccepted.message}
+            </p>
           )}
-        </FieldLabel>
-      </Field>
-      <AvatarField
-        name={`${firstName} ${lastName}`}
-        onChange={(url) => form.setValue("avatarUrl", url)}
-        error={form.formState.errors.avatarUrl?.message}
-      />
-      <Controller
-        control={form.control}
-        name="termsAccepted"
-        render={({ field }) => (
-          <label className="flex cursor-pointer items-center gap-2 text-sm">
-            <Checkbox
-              checked={field.value}
-              onCheckedChange={(checked) => field.onChange(checked === true)}
-            />
-            I agree to the Terms and Privacy Policy
-          </label>
-        )}
-      />
-      {form.formState.errors.termsAccepted && (
-        <p className="text-sm text-destructive">{form.formState.errors.termsAccepted.message}</p>
-      )}
-      <Button type="submit" className="w-full" disabled={form.formState.isSubmitting}>
-        {form.formState.isSubmitting ? "Creating account..." : "Sign up"}
+        </div>
+      </div>
+
+      <Button
+        type="submit"
+        className="h-11 w-full rounded-xl font-medium"
+        disabled={form.formState.isSubmitting}
+      >
+        {form.formState.isSubmitting ? "Creating account..." : "Create account"}
       </Button>
     </form>
   );

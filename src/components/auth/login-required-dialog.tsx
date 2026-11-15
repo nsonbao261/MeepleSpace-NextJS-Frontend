@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 
 import { Button } from "@/components/ui/button";
+import { ButtonLink } from "@/components/common";
 import {
   Dialog,
   DialogContent,
@@ -66,7 +66,7 @@ export function LoginRequiredDialog() {
           <Button variant="outline" onClick={closeGate}>
             Keep browsing
           </Button>
-          <Button render={<Link href={loginHref} />}>Log in</Button>
+          <ButtonLink href={loginHref}>Log in</ButtonLink>
         </DialogFooter>
       </DialogContent>
     </Dialog>
