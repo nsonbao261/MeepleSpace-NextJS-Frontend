@@ -27,6 +27,7 @@ export function resetOrdersForTests() {
   }
 }
 
+//Persist order, dev only
 export function setOrderPersistence(code: string, enabled: boolean) {
   if (typeof window === "undefined") return;
   try {
@@ -86,10 +87,11 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
     status: "pending",
     lines,
     itemCount: lines.reduce((count, item) => count + item.quantity, 0),
+    subtotal,
     address: input.address,
     deliveryTier: deliveryInfo.tier,
     deliveryFee,
-    voucher: voucher ?? null,
+    voucher,
     discount,
     total,
     estimatedDeliveryFrom: deliveryInfo.from,
@@ -143,6 +145,7 @@ export async function setOrderStatus(
   }
   ordersMap.set(code, order);
 
+  //Save order in Local Storage, dev only
   if (typeof window !== "undefined") {
     try {
       const key = `${ORDER_STORAGE_KEY_PREFIX}${code}`;
@@ -161,12 +164,7 @@ export async function listOrders(accountId: string): Promise<Order[]> {
   await delay();
   const orderMap = new Map<string, Order>();
 
-  // 1. Add orders from memory
-  for (const [code, order] of ordersMap.entries()) {
-    orderMap.set(code, order);
-  }
-
-  // 2. Add orders from sessionStorage keys matching prefix
+  // 1. Seed from sessionStorage snapshots
   if (typeof window !== "undefined") {
     try {
       for (let i = 0; i < sessionStorage.length; i++) {
@@ -188,6 +186,11 @@ export async function listOrders(accountId: string): Promise<Order[]> {
     } catch {
       // ignore
     }
+  }
+
+  // 2. In-memory orders win for duplicate codes
+  for (const [code, order] of ordersMap.entries()) {
+    orderMap.set(code, order);
   }
 
   const results: Order[] = [];

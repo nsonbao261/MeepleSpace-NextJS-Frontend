@@ -31,7 +31,6 @@ export function CartSummary() {
         <Separator />
         <div className="flex justify-between text-sm">
           <span className="text-muted-foreground">Items ({itemCount})</span>
-          <span className="font-medium">{formatVnd(subtotal)}</span>
         </div>
         <Separator />
         <div className="flex justify-between text-base font-semibold">

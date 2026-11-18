@@ -52,6 +52,7 @@ export interface Order {
   status: OrderStatus;
   lines: OrderLine[];
   itemCount: number;
+  subtotal: number;
   address: Address;
   deliveryTier: DeliveryTier;
   deliveryFee: number;

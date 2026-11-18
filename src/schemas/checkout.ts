@@ -10,7 +10,6 @@ export const newAddressSchema = z.object({
   label: z
     .string()
     .trim()
-    .optional()
     .transform((value) => value || "Home"),
 });
 
