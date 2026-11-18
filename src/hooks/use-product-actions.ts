@@ -21,11 +21,14 @@ export function useProductActions(product: Product) {
   const outOfStock = product.stock === 0;
   const returnPath = `/products/${product.slug}`;
   const cartLine = {
+    id: product.id,
+    kind: "base" as const,
     productId: product.id,
     slug: product.slug,
     name: product.name,
-    price: product.price,
+    unitPrice: product.price,
     image: product.image,
+    maxQuantity: product.stock,
   };
 
   function addToCart() {

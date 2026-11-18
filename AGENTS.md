@@ -61,22 +61,24 @@ specs/                  # Feature specs
 
 ## Commands
 
-| Command                             | Purpose                                                   |
-| ----------------------------------- | --------------------------------------------------------- |
-| `npm install`                       | Install dependencies                                      |
-| `npm run dev`                       | Start the dev server at http://localhost:3000 (Turbopack) |
-| `npm run build`                     | Create a production build                                 |
-| `npm run start`                     | Serve the production build                                |
-| `npm run lint`                      | Run ESLint                                                |
-| `npm run typecheck`                 | Type-check (`tsc --noEmit`)                               |
-| `npm run verify`                    | Gate: typecheck + lint
+| Command             | Purpose                                                   |
+| ------------------- | --------------------------------------------------------- |
+| `npm install`       | Install dependencies                                      |
+| `npm run dev`       | Start the dev server at http://localhost:3000 (Turbopack) |
+| `npm run build`     | Create a production build                                 |
+| `npm run start`     | Serve the production build                                |
+| `npm run lint`      | Run ESLint                                                |
+| `npm run typecheck` | Type-check (`tsc --noEmit`)                               |
+| `npm run verify`    | Gate: typecheck + lint                                    |
+
                              |
-| `npm run format`                    | Format all files with Prettier                            |
-| `npm run format:check`              | Check formatting                                          |
-| `npm run test`                      | Run Vitest once                                           |
-| `npm run test:watch`                | Run Vitest in watch mode                                  |
-| `npm run test:coverage`             | Run tests with V8 coverage                                |
-| `npx shadcn@latest add <component>` | Add a shadcn/ui component                                 |
+
+| `npm run format` | Format all files with Prettier |
+| `npm run format:check` | Check formatting |
+| `npm run test` | Run Vitest once |
+| `npm run test:watch` | Run Vitest in watch mode |
+| `npm run test:coverage` | Run tests with V8 coverage |
+| `npx shadcn@latest add <component>` | Add a shadcn/ui component |
 
 - Copy `.env.example` to `.env.local` before local development (see `NEXT_PUBLIC_API_URL`).
 - Playwright has no script yet because it is not installed/configured.

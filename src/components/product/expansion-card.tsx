@@ -24,29 +24,38 @@ export function ExpansionCard({ expansion, baseProduct }: ExpansionCardProps) {
 
   function addExpansion() {
     addItem({
+      id: expansion.id,
+      kind: "expansion",
       productId: expansion.id,
       slug: expansion.slug,
       name: expansion.name,
-      price: expansion.price,
+      unitPrice: expansion.price,
       image: expansion.image,
+      maxQuantity: expansion.stock,
     });
     toast.add({ type: "success", title: "Expansion added to cart", description: expansion.name });
   }
 
   function addBundle() {
     addItem({
+      id: baseProduct.id,
+      kind: "base",
       productId: baseProduct.id,
       slug: baseProduct.slug,
       name: baseProduct.name,
-      price: baseProduct.price,
+      unitPrice: baseProduct.price,
       image: baseProduct.image,
+      maxQuantity: baseProduct.stock,
     });
     addItem({
+      id: expansion.id,
+      kind: "expansion",
       productId: expansion.id,
       slug: expansion.slug,
       name: expansion.name,
-      price: expansion.price,
+      unitPrice: expansion.price,
       image: expansion.image,
+      maxQuantity: expansion.stock,
     });
     toast.add({
       type: "success",

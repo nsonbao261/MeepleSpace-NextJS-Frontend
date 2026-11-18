@@ -11,7 +11,8 @@ export function RequireAuth({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     if (status === "guest") {
-      router.push(`/login?next=${encodeURIComponent(window.location.pathname)}`);
+      const next = window.location.pathname + window.location.search;
+      router.push(`/login?next=${encodeURIComponent(next)}`);
     }
   }, [status, router]);
 

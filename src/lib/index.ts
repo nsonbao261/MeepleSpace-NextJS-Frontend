@@ -1,4 +1,5 @@
 export * from "./auth-token";
+export * from "./checkout";
 export * from "./faker";
 export * from "./format";
 export * from "./product";
